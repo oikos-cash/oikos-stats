@@ -1,6 +1,6 @@
 import { FC, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import snxData from 'synthetix-data';
+import snxData from '@oikos/oikos-data';
 import { ethers } from 'ethers';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -49,19 +49,15 @@ const NetworkSection: FC = () => {
 	// NOTE: use interval? or save data calls?
 	useEffect(() => {
 		const fetchData = async () => {
-			const { formatEther, formatUnits, parseUnits } = snxjs.utils;
-
-			const curveContract = new ethers.Contract(
-				curveSusdPool.address,
-				// @ts-ignore
-				curveSusdPool.abi,
-				provider
-			);
+			const { formatEther, formatUnits, parseUnits } = snxjs.ethers.utils;
+			 
+			const curveContract = null ;
 
 			const usdcContractNumber = 1;
 			const susdContractNumber = 3;
 			const susdAmount = 10000;
-			const susdAmountWei = parseUnits(susdAmount.toString(), 18);
+			const susdAmountWei = Number(susdAmount.toString() / 1e18);
+			console.log({susdAmountWei})
 
 			const [
 				unformattedSnxPrice,
@@ -79,20 +75,20 @@ const NetworkSection: FC = () => {
 				ethSusdCollateralBalance,
 				ethCollateralBalance,
 			] = await Promise.all([
-				snxjs.contracts.ExchangeRates.rateForCurrency(snxjs.toBytes32('SNX')),
-				snxjs.contracts.Synthetix.totalSupply(),
-				curveContract.get_dy_underlying(susdContractNumber, usdcContractNumber, susdAmountWei),
+				snxjs.ExchangeRates.rateForCurrency(snxjs.ethers.utils.formatBytes32String('OKS')),
+				snxjs.Synthetix.totalSupply(),
+				0,//curveContract.get_dy_underlying(susdContractNumber, usdcContractNumber, susdAmountWei),
 				axios.get(CMC_API),
-				snxjs.contracts.SynthetixState.lastDebtLedgerEntry(),
-				snxjs.contracts.Synthetix.totalIssuedSynthsExcludeEtherCollateral(snxjs.toBytes32('sUSD')),
-				snxjs.contracts.SynthetixState.issuanceRatio(),
+				snxjs.SynthetixState.lastDebtLedgerEntry(),
+				snxjs.Synthetix.totalIssuedSynths(snxjs.ethers.utils.formatBytes32String('sUSD')),
+				snxjs.SynthetixState.issuanceRatio(),
 				snxData.snx.holders({ max: 1000 }),
 				snxData.snx.total(),
-				snxjs.contracts.SynthsUSD.totalSupply(),
+				snxjs.sUSD.totalSupply(),
 				snxData.synths.holders({ max: 5, synth: 'sUSD' }),
-				snxjs.contracts.EtherCollateralsUSD.totalIssuedSynths(),
-				provider.getBalance(snxjs.contracts.EtherCollateralsUSD.address),
-				provider.getBalance(snxjs.contracts.EtherCollateral.address),
+				0,//.EtherCollateralsUSD.totalIssuedSynths(),
+				0,//provider.getBalance(snxjs.contracts.EtherCollateralsUSD.address),
+				0,//provider.getBalance(snxjs.contracts.EtherCollateral.address),
 			]);
 
 			setEtherLocked(
@@ -104,16 +100,16 @@ const NetworkSection: FC = () => {
 			setSNXPrice(formattedSNXPrice);
 			const totalSupply = Number(formatEther(unformattedSnxTotalSupply));
 			setSNXTotalSupply(totalSupply);
-			const exchangeAmount = Number(formatUnits(unformattedExchangeAmount, 6));
+			const exchangeAmount = Number(unformattedExchangeAmount);
 			setsUSDPrice(exchangeAmount / susdAmount);
 			setsUSDFromEther(Number(snxjs.utils.formatEther(sUSDFromEth)));
 
-			const dailyVolume = cmcSNXData?.data?.data?.SNX?.quote?.USD?.volume_24h;
+			const dailyVolume = 0;//cmcSNXData?.data?.data?.SNX?.quote?.USD?.volume_24h;
 			if (dailyVolume) {
 				setSNX24HVolume(dailyVolume);
 			}
 
-			const lastDebtLedgerEntry = Number(formatUnits(unformattedLastDebtLedgerEntry, 27));
+			const lastDebtLedgerEntry = Number(snxjs.ethers.utils.formatUnits(unformattedLastDebtLedgerEntry, 27) );
 
 			const [totalIssuedSynths, issuanceRatio, usdToSnxPrice, sUSDTotalSupply] = [
 				unformattedTotalIssuedSynths,
@@ -128,14 +124,19 @@ const NetworkSection: FC = () => {
 			let stakersTotalCollateral = 0;
 
 			for (const { collateral, debtEntryAtIndex, initialDebtOwnership } of holders) {
+
+				console.log(`(${totalIssuedSynths} * ${lastDebtLedgerEntry} / ${debtEntryAtIndex}) * ${initialDebtOwnership}`)
 				let debtBalance =
 					((totalIssuedSynths * lastDebtLedgerEntry) / debtEntryAtIndex) * initialDebtOwnership;
+
+				console.log( debtBalance) 
 				let collateralRatio = debtBalance / collateral / usdToSnxPrice;
 
-				if (isNaN(debtBalance)) {
+				if (isNaN(debtBalance) || isNaN(collateralRatio) ) {
 					debtBalance = 0;
 					collateralRatio = 0;
 				}
+
 				const lockedSnx = collateral * Math.min(1, collateralRatio / issuanceRatio);
 
 				if (Number(debtBalance) > 0) {
@@ -144,7 +145,13 @@ const NetworkSection: FC = () => {
 				}
 				snxTotal += Number(collateral);
 				snxLocked += Number(lockedSnx);
+
+				//console.log(collateral, debtEntryAtIndex, initialDebtOwnership, totalIssuedSynths, usdToSnxPrice, debtBalance, collateralRatio, lockedSnx, snxTotal, snxLocked)
+
+				console.log(collateralRatio)
 			}
+
+			console.log(stakersTotalDebt , stakersTotalCollateral)
 
 			const topHolders = topSUSDHolders.map(
 				({ balanceOf, address }: { balanceOf: number; address: string }) => ({
@@ -172,8 +179,10 @@ const NetworkSection: FC = () => {
 		});
 
 	const fetchNewChartData = async (fetchPeriod: ChartPeriod) => {
+		console.log({snxData})
 		let newSNXPriceData = [];
 		let timeSeries = '1d';
+
 		if (fetchPeriod === 'D') {
 			timeSeries = '15m';
 			newSNXPriceData = await snxData.rate.snxAggregate({ timeSeries, max: 24 * 4 });
@@ -185,6 +194,9 @@ const NetworkSection: FC = () => {
 		} else if (fetchPeriod === 'Y') {
 			newSNXPriceData = await snxData.rate.snxAggregate({ timeSeries, max: 365 });
 		}
+		
+		console.log({newSNXPriceData})
+		
 		newSNXPriceData = newSNXPriceData.reverse();
 		setPriorSNXPrice(newSNXPriceData[0].averagePrice);
 		setSNXChartPriceData(formatChartData(newSNXPriceData, timeSeries as TimeSeries));
@@ -378,31 +390,8 @@ const NetworkSection: FC = () => {
 					}
 				/>
 			</StatsRow>
-			<SUSDDistribution data={SUSDHolders} totalSupplySUSD={totalSupplySUSD} />
-			<StatsRow>
-				<StatsBox
-					key="ETHLOCKED"
-					title={t('homepage.eth-collateral.title')}
-					num={etherLocked}
-					percentChange={null}
-					subText={t('homepage.eth-collateral.subtext')}
-					color={COLORS.pink}
-					numberStyle="number4"
-					numBoxes={2}
-					infoData={null}
-				/>
-				<StatsBox
-					key="SUSDMINTEDETH"
-					title={t('homepage.susd-minted-from-eth.title')}
-					num={sUSDFromEther}
-					percentChange={null}
-					subText={t('homepage.susd-minted-from-eth.subtext')}
-					color={COLORS.green}
-					numberStyle="currency0"
-					numBoxes={2}
-					infoData={null}
-				/>
-			</StatsRow>
+			{/*<SUSDDistribution data={SUSDHolders} totalSupplySUSD={totalSupplySUSD} />*/}
+
 		</>
 	);
 };

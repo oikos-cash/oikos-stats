@@ -48,7 +48,7 @@ export const getFormattedNumber = (num: number | null, numFormat: NumberStyle) =
 	if (numFormat === 'currency0') {
 		formattedNum = formatCurrency(num, 0);
 	} else if (numFormat === 'currency2') {
-		formattedNum = formatCurrency(num, 2);
+		formattedNum = formatCurrency(num, 4);
 	} else if (numFormat === 'number') {
 		formattedNum = formatNumber(num);
 	} else if (numFormat === 'number4') {

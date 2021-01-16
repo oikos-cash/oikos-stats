@@ -11,8 +11,20 @@ import { HeadersContext } from 'pages/_app';
 const Header: FC = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const toggleMenu = () => setMenuOpen(!menuOpen);
-	const headersContext = useContext(HeadersContext);
+	let headersContext = useContext(HeadersContext);
+ 
+ 
+	const allowed = ['STAKING', 'NETWORK', 'TRADING', 'SYNTHS'];
 
+	const filtered = Object.keys(headersContext)
+	  .filter(key => allowed.includes(key))
+	  .reduce((obj, key) => {
+		obj[key] = headersContext[key];
+		return obj;
+	  }, {});
+
+	headersContext = filtered;
+	
 	useEffect(() => {
 		const routeApp = async () => {
 			// NOTE that there needs to be a slight delay so that it can find the right section
@@ -38,10 +50,11 @@ const Header: FC = () => {
 				<HeaderContainerInner>
 					<HeaderSectionLeft>
 						<StatsLogoWrap>
-							<StatsLogo />
+							<StatsLogo height={"30px"} />
 						</StatsLogoWrap>
 					</HeaderSectionLeft>
 					<HeaderSectionRight>
+						
 						{Object.entries(headersContext).map(([key, value]) => (
 							<HeaderLink key={key} onClick={() => scrollToRef(value, key.toLowerCase())}>
 								{key}
@@ -104,6 +117,7 @@ const HeaderContainerInner = styled.div`
 
 const StatsLogoWrap = styled.div`
 	margin-top: -4px;
+	margin-left: -37%;
 `;
 
 const HeaderSectionLeft = styled.div`

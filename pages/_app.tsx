@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 
-import { synthetix, Network } from '@synthetixio/js';
+import { SynthetixJs } from '@oikos/oikos-js';
 import { ThemeProvider as SCThemeProvider } from 'styled-components';
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 
@@ -24,10 +24,10 @@ export const headersAndScrollRef: { [key: string]: RefObject<unknown> } = {
 	OPTIONS: createRef(),
 };
 
-const provider = new ethers.providers.InfuraProvider(
-	'homestead',
-	process.env.NEXT_PUBLIC_INFURA_KEY
-);
+const provider = {};// new ethers.providers.InfuraProvider(
+	//'homestead',
+	//process.env.NEXT_PUBLIC_INFURA_KEY
+//);
 export const ProviderContext = createContext(provider);
 
 export const HeadersContext = createContext(headersAndScrollRef);
@@ -44,7 +44,7 @@ export const SNXContext = createContext({
 	setSNXStaked: (num: number) => null,
 });
 
-const snxjs = synthetix({ network: Network.Mainnet, provider });
+const snxjs = new SynthetixJs({ networkId:1 });
 
 export const SNXJSContext = createContext(snxjs);
 

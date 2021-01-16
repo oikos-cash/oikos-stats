@@ -1,1 +1,1 @@
-declare module 'synthetix-data';
+declare module '@oikos/oikos-data';

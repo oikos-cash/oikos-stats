@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import snxData from 'synthetix-data';
+import snxData from '@oikos/oikos-data';
 import findIndex from 'lodash/findIndex';
 import { format } from 'date-fns';
 import { useTranslation, Trans } from 'react-i18next';

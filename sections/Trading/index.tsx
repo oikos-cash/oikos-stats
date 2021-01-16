@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import snxData from 'synthetix-data';
+import snxData from '@oikos/oikos-data';
 import { useTranslation, Trans } from 'react-i18next';
 
 import SectionHeader from 'components/SectionHeader';

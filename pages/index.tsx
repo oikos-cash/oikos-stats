@@ -27,15 +27,11 @@ const HomePage: FC = () => {
 			<div ref={headersContext.TRADING as React.RefObject<HTMLDivElement>}>
 				<TradingSection />
 			</div>
-			<div ref={headersContext['YIELD FARMING'] as React.RefObject<HTMLDivElement>}>
-				<YieldFarmingSection />
-			</div>
+ 
 			<div ref={headersContext.SYNTHS as React.RefObject<HTMLDivElement>}>
 				<SynthsSection />
 			</div>
-			<div ref={headersContext.OPTIONS as React.RefObject<HTMLDivElement>}>
-				<OptionsSection />
-			</div>
+
 		</>
 	);
 };

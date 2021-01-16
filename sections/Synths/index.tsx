@@ -30,70 +30,7 @@ const SynthsSection: FC<{}> = () => {
 	const provider = useContext(ProviderContext);
 
 	useEffect(() => {
-		const fetchData = async () => {
-			const SynthSummaryUtil = new ethers.Contract(
-				synthSummaryUtil.address,
-				synthSummaryUtil.abi,
-				provider
-			);
-
-			const synthTotalSupplies = await SynthSummaryUtil.synthsTotalSupplies();
-
-			let totalValue = 0;
-			const unsortedOpenInterest: SynthTotalSupply[] = [];
-			for (let i = 0; i < synthTotalSupplies[0].length; i++) {
-				let value = Number(snxjs.utils.formatEther(synthTotalSupplies[2][i]));
-				unsortedOpenInterest.push({
-					name: snxjs.utils.parseBytes32String(synthTotalSupplies[0][i]),
-					totalSupply: Number(snxjs.utils.formatEther(synthTotalSupplies[1][i])),
-					value,
-				});
-				totalValue += value;
-			}
-
-			const openInterestSynths = snxjs.synths
-				.filter((synth) => ['crypto', 'index'].includes(synth.category))
-				.map(({ name }) => name);
-
-			const openInterest: OpenInterest = orderBy(unsortedOpenInterest, 'value', 'desc')
-				.filter((item) => openInterestSynths.includes(item.name))
-				.reduce((acc: OpenInterest, curr: SynthTotalSupply): OpenInterest => {
-					const name = curr.name.slice(1);
-					const subObject = {
-						[curr.name]: {
-							value: curr.value,
-							totalSupply: curr.totalSupply ?? 0,
-						},
-					};
-					if (acc[name]) {
-						acc[name] = { ...acc[name], ...subObject };
-					} else {
-						acc[name] = subObject;
-					}
-					return acc;
-				}, {});
-
-			const formattedPieChartData = unsortedOpenInterest.reduce((acc, curr) => {
-				if (curr.value / totalValue < MIN_PERCENT_FOR_PIE_CHART) {
-					// @ts-ignore
-					const othersIndex = findIndex(acc, (o) => o.name === 'others');
-					if (othersIndex === -1) {
-						// @ts-ignore
-						acc.push({ name: 'others', value: curr.value });
-					} else {
-						// @ts-ignore
-						acc[othersIndex].value = acc[othersIndex].value + curr.value;
-					}
-				} else {
-					// @ts-ignore
-					acc.push(curr);
-				}
-				return acc;
-			}, []);
-			setBarChartData(openInterest);
-			setPieChartData(orderBy(formattedPieChartData, 'value', 'desc'));
-		};
-		fetchData();
+ 
 	}, []);
 	const totalValue = pieChartData.reduce((acc, { value }) => acc + value, 0);
 	return (

@@ -1,4 +1,4 @@
-declare module 'synthetix-js' {
+declare module 'oikos-js' {
 	import { JsonRpcSigner, Web3Provider } from 'ethers/providers';
 	import { ethers } from 'ethers';
 	import { BigNumberish } from 'ethers/utils';

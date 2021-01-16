@@ -1,5 +1,5 @@
 import { FC, useState, useEffect, useContext, useMemo } from 'react';
-import snxData from 'synthetix-data';
+import snxData from '@oikos/oikos-data';
 import { useTranslation, Trans } from 'react-i18next';
 import { BigNumber } from 'ethers';
 import { format } from 'date-fns';
@@ -29,8 +29,10 @@ const Staking: FC = () => {
 
 	useEffect(() => {
 		const fetchFeePeriod = async (period: number): Promise<FeePeriod> => {
+			console.log({snxjs})
 			const { formatEther } = snxjs.utils;
-			const feePeriod = await snxjs.contracts.FeePool.recentFeePeriods(period);
+			const feePeriod = await snxjs.FeePool.recentFeePeriods(period);
+			console.log({feePeriod})
 			return {
 				startTime: BigNumber.from(feePeriod.startTime).toNumber() * 1000 || 0,
 				feesToDistribute: Number(formatEther(feePeriod.feesToDistribute)) || 0,
@@ -70,6 +72,8 @@ const Staking: FC = () => {
 			newStakersData = await snxData.snx.aggregateActiveStakers({ max: 365 });
 		}
 		newStakersData = newStakersData.reverse();
+
+		console.log({newStakersData})
 		setTotalActiveStakers(newStakersData[newStakersData.length - 1].count);
 		setStakersChartData(formatChartData(newStakersData));
 	};
@@ -80,7 +84,7 @@ const Staking: FC = () => {
 
 	const stakingPeriods: ChartPeriod[] = ['W', 'M', 'Y'];
 	const SNXValueStaked = useMemo(() => (SNXPrice ?? 0) * (SNXStaked ?? 0), [SNXPrice, SNXStaked]);
-
+	console.log({totalActiveStakers})
 	return (
 		<>
 			<SectionHeader title="STAKING" />

@@ -1,10 +1,10 @@
-import { pageResults } from 'synthetix-data';
+import { pageResults } from '@oikos/oikos-data';
 
 const aaveSubgraphURL = 'https://api.thegraph.com/subgraphs/name/aave/protocol-multy-raw';
 const uniswapV2SubgraphURL = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2';
 const CRVTokenAddress = '0xd533a949740bb3306d119cc777fa900ba034cd52';
 const synthetixExchangesGraphURL =
-	'https://api.thegraph.com/subgraphs/name/synthetixio-team/synthetix-exchanges';
+	'https://thegraph.oikos.cash/subgraphs/name/oikos-team/oikos-exchanges2';
 
 export async function getAaveDepositRate(): Promise<number> {
 	return pageResults({
@@ -52,12 +52,7 @@ export async function getPostArchernarTotals() {
 		pageResults({
 			api: synthetixExchangesGraphURL,
 			query: {
-				entity: 'postArchernarTotals',
-				selection: {
-					where: {
-						id: `\\"mainnet\\"`,
-					},
-				},
+				entity: 'totals',
 				properties: ['trades', 'exchangers', 'exchangeUSDTally', 'totalFeesGeneratedInUSD'],
 			},
 			max: 1,
