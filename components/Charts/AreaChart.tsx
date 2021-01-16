@@ -45,8 +45,7 @@ const AreaChart: FC<AreaChartProps> = ({
 			<ChartTimeSelectors activePeriod={activePeriod} periods={periods} onClick={onPeriodSelect} />
 		</ChartHeader>
 		<BasicAreaChart
-			percentChange={percentChange}
-			valueType={numFormat}
+			percentChange={percentChange} 
 			data={data}
 			timeSeries={timeSeries}
 		/>

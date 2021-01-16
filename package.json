@@ -13,7 +13,6 @@
 	"dependencies": {
 		"@material-ui/core": "4.11.0",
 		"@material-ui/lab": "4.0.0-alpha.56",
-		"@synthetixio/js": "0.1.9",
 		"axios": "0.20.0",
 		"bignumber.js": "9.0.0",
 		"bnc-notify": "1.3.1",
@@ -34,8 +33,8 @@
 		"react-table": "7.5.0",
 		"recharts": "1.8.5",
 		"styled-components": "5.1.1",
-		"synthetix-data": "2.1.29",
-		"synthetix-js": "2.27.4",
+		"@oikos/oikos-data": "0.1.1",
+		"@oikos/oikos-js": "0.6.8",
 		"unstated-next": "1.1.0",
 		"use-immer": "0.4.1"
 	},
@@ -69,9 +68,7 @@
 		"typescript": "3.9.7"
 	},
 	"husky": {
-		"hooks": {
-			"pre-commit": "lint-staged"
-		}
+
 	},
 	"lint-staged": {
 		"*.@(ts|tsx)": [

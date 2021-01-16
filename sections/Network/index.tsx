@@ -125,11 +125,10 @@ const NetworkSection: FC = () => {
 
 			for (const { collateral, debtEntryAtIndex, initialDebtOwnership } of holders) {
 
-				console.log(`(${totalIssuedSynths} * ${lastDebtLedgerEntry} / ${debtEntryAtIndex}) * ${initialDebtOwnership}`)
+				//console.log(`(${totalIssuedSynths} * ${lastDebtLedgerEntry} / ${debtEntryAtIndex}) * ${initialDebtOwnership}`)
 				let debtBalance =
 					((totalIssuedSynths * lastDebtLedgerEntry) / debtEntryAtIndex) * initialDebtOwnership;
 
-				console.log( debtBalance) 
 				let collateralRatio = debtBalance / collateral / usdToSnxPrice;
 
 				if (isNaN(debtBalance) || isNaN(collateralRatio) ) {
@@ -147,11 +146,9 @@ const NetworkSection: FC = () => {
 				snxLocked += Number(lockedSnx);
 
 				//console.log(collateral, debtEntryAtIndex, initialDebtOwnership, totalIssuedSynths, usdToSnxPrice, debtBalance, collateralRatio, lockedSnx, snxTotal, snxLocked)
-
-				console.log(collateralRatio)
 			}
 
-			console.log(stakersTotalDebt , stakersTotalCollateral)
+			//console.log(stakersTotalDebt , stakersTotalCollateral)
 
 			const topHolders = topSUSDHolders.map(
 				({ balanceOf, address }: { balanceOf: number; address: string }) => ({
@@ -172,12 +169,15 @@ const NetworkSection: FC = () => {
 
 	const formatChartData = (data: SNXPriceData[], timeSeries: TimeSeries): AreaChartData[] =>
 		(data as SNXPriceData[]).map(({ id, averagePrice }) => {
+			console.log(averagePrice)
 			return {
 				created: formatIdToIsoString(id, timeSeries as TimeSeries),
-				value: averagePrice,
+				value: averagePrice ,
 			};
 		});
 
+	
+		
 	const fetchNewChartData = async (fetchPeriod: ChartPeriod) => {
 		console.log({snxData})
 		let newSNXPriceData = [];
@@ -207,6 +207,7 @@ const NetworkSection: FC = () => {
 	}, [priceChartPeriod]);
 
 	const pricePeriods: ChartPeriod[] = ['D', 'W', 'M', 'Y'];
+	console.log(SNXChartPriceData)
 	return (
 		<>
 			<SectionHeader title={t('homepage.section-header.network')} first={true} />

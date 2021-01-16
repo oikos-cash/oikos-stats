@@ -117,7 +117,7 @@ const HeaderContainerInner = styled.div`
 
 const StatsLogoWrap = styled.div`
 	margin-top: -4px;
-	margin-left: -37%;
+	margin-left: -42%;
 `;
 
 const HeaderSectionLeft = styled.div`

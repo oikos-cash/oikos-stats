@@ -33,7 +33,7 @@ const BasicAreaChart: FC<BasicAreaChartProps> = ({
 				variant="rect"
 				animation="wave"
 				width="100%"
-				height={400}
+				height={600}
 			/>
 		);
 	}
@@ -86,8 +86,8 @@ const BasicAreaChart: FC<BasicAreaChartProps> = ({
 					separator=""
 					formatter={(value) =>
 						valueType === 'currency2'
-							? [formatCurrency(value as number, 2), '']
-							: [formatNumber(value as number, 0), '']
+							? [formatCurrency(value as number, 4), '']
+							: [formatNumber(value as number, 4), '']
 					}
 					contentStyle={{
 						backgroundColor: colors.tooltipBlue,
