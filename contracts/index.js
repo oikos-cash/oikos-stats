@@ -5,7 +5,7 @@ import curveSusdPoolToken from './curveSusdPoolToken';
 import curveSusdGauge from './curveSusdGauge';
 import curveGaugeController from './curveGaugeController';
 import synthSummaryUtil from './synthSummaryUtil';
-
+import swapUSDT from './swapV2Pair'
 export {
 	curvepoolRewards,
 	iEth4Rewards,
@@ -14,4 +14,5 @@ export {
 	curveSusdGauge,
 	curveGaugeController,
 	synthSummaryUtil,
+	swapUSDT
 };

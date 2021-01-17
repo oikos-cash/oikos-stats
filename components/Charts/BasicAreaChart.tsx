@@ -33,7 +33,7 @@ const BasicAreaChart: FC<BasicAreaChartProps> = ({
 				variant="rect"
 				animation="wave"
 				width="100%"
-				height={600}
+				height={300}
 			/>
 		);
 	}
@@ -74,8 +74,8 @@ const BasicAreaChart: FC<BasicAreaChartProps> = ({
 					hide={true}
 					type="number"
 					domain={
-						Math.abs(percentChange || 0) < 0.5
-							? [(dataMin) => 2.5 - Math.abs(dataMin), (dataMax) => dataMax * 1]
+						Math.abs(percentChange || 0) < 0.01
+							? [(dataMin) => 0.01 - Math.abs(dataMin), (dataMax) => dataMax * 1]
 							: [(dataMin) => 0 - Math.abs(dataMin), (dataMax) => dataMax * 1]
 					}
 				/>

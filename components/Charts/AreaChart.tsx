@@ -45,7 +45,8 @@ const AreaChart: FC<AreaChartProps> = ({
 			<ChartTimeSelectors activePeriod={activePeriod} periods={periods} onClick={onPeriodSelect} />
 		</ChartHeader>
 		<BasicAreaChart
-			percentChange={percentChange} 
+			percentChange={percentChange}
+			valueType={numFormat}
 			data={data}
 			timeSeries={timeSeries}
 		/>
@@ -57,6 +58,11 @@ export default AreaChart;
 const ChartContainer = styled.div`
 	background: ${(props) => props.theme.colors.mediumBlue};
 	margin: 20px auto;
+	max-width: ${MAX_PAGE_WIDTH}px;
+`;
+
+const ChartContainerNM = styled.div`
+	background: ${(props) => props.theme.colors.mediumBlue};
 	max-width: ${MAX_PAGE_WIDTH}px;
 `;
 

@@ -3,6 +3,8 @@ import axios from 'axios';
 import snxData from '@oikos/oikos-data';
 import { ethers } from 'ethers';
 import { Trans, useTranslation } from 'react-i18next';
+import { BigNumber } from "bignumber.js";
+import { getSwapV2sUSDPrice } from 'utils/customGraphQueries';
 
 import { AreaChartData, ChartPeriod, SNXPriceData, TimeSeries, TreeMapData } from 'types/data';
 import StatsBox from 'components/StatsBox';
@@ -22,9 +24,10 @@ import { SNXJSContext, SUSDContext, SNXContext, ProviderContext } from 'pages/_a
 import { formatIdToIsoString } from 'utils/formatter';
 import { getSUSDHoldersName } from 'utils/dataMapping';
 import { LinkText, NewParagraph } from 'components/common';
-import { curveSusdPool } from 'contracts';
+import {swapUSDT} from 'contracts';
 
 const CMC_API = 'https://coinmarketcap-api.synthetix.io/public/prices?symbols=SNX';
+
 
 const NetworkSection: FC = () => {
 	const { t } = useTranslation();
@@ -46,8 +49,10 @@ const NetworkSection: FC = () => {
 	const { SNXPrice, setSNXPrice, setSNXStaked } = useContext(SNXContext);
 	const provider = useContext(ProviderContext);
 
+
 	// NOTE: use interval? or save data calls?
 	useEffect(() => {
+
 		const fetchData = async () => {
 			const { formatEther, formatUnits, parseUnits } = snxjs.ethers.utils;
 			 
@@ -57,8 +62,13 @@ const NetworkSection: FC = () => {
 			const susdContractNumber = 3;
 			const susdAmount = 10000;
 			const susdAmountWei = Number(susdAmount.toString() / 1e18);
-			console.log({susdAmountWei})
+			//TODO remove hardcoded address
+			//const pairContractUSDT = await snxjs.util.contractSettings.tronWeb.contract(swapUSDT.abi, swapUSDT.address);
+			//const { _reserve0, _reserve1} = await  pairContractUSDT.getReserves().call({_isConstant:true}) 
+ 
+			const sUSDPrice = await getSwapV2sUSDPrice();
 
+			console.log(`sUSD price from Swap V2 is ${sUSDPrice}`)
 			const [
 				unformattedSnxPrice,
 				unformattedSnxTotalSupply,
@@ -77,7 +87,7 @@ const NetworkSection: FC = () => {
 			] = await Promise.all([
 				snxjs.ExchangeRates.rateForCurrency(snxjs.ethers.utils.formatBytes32String('OKS')),
 				snxjs.Synthetix.totalSupply(),
-				0,//curveContract.get_dy_underlying(susdContractNumber, usdcContractNumber, susdAmountWei),
+				sUSDPrice,//curveContract.get_dy_underlying(susdContractNumber, usdcContractNumber, susdAmountWei),
 				axios.get(CMC_API),
 				snxjs.SynthetixState.lastDebtLedgerEntry(),
 				snxjs.Synthetix.totalIssuedSynths(snxjs.ethers.utils.formatBytes32String('sUSD')),
@@ -90,7 +100,7 @@ const NetworkSection: FC = () => {
 				0,//provider.getBalance(snxjs.contracts.EtherCollateralsUSD.address),
 				0,//provider.getBalance(snxjs.contracts.EtherCollateral.address),
 			]);
-
+			 
 			setEtherLocked(
 				Number(snxjs.utils.formatEther(ethCollateralBalance)) +
 					Number(snxjs.utils.formatEther(ethSusdCollateralBalance))
@@ -101,7 +111,7 @@ const NetworkSection: FC = () => {
 			const totalSupply = Number(formatEther(unformattedSnxTotalSupply));
 			setSNXTotalSupply(totalSupply);
 			const exchangeAmount = Number(unformattedExchangeAmount);
-			setsUSDPrice(exchangeAmount / susdAmount);
+			setsUSDPrice(exchangeAmount );
 			setsUSDFromEther(Number(snxjs.utils.formatEther(sUSDFromEth)));
 
 			const dailyVolume = 0;//cmcSNXData?.data?.data?.SNX?.quote?.USD?.volume_24h;
@@ -169,7 +179,7 @@ const NetworkSection: FC = () => {
 
 	const formatChartData = (data: SNXPriceData[], timeSeries: TimeSeries): AreaChartData[] =>
 		(data as SNXPriceData[]).map(({ id, averagePrice }) => {
-			console.log(averagePrice)
+			 
 			return {
 				created: formatIdToIsoString(id, timeSeries as TimeSeries),
 				value: averagePrice ,
@@ -207,7 +217,7 @@ const NetworkSection: FC = () => {
 	}, [priceChartPeriod]);
 
 	const pricePeriods: ChartPeriod[] = ['D', 'W', 'M', 'Y'];
-	console.log(SNXChartPriceData)
+	 
 	return (
 		<>
 			<SectionHeader title={t('homepage.section-header.network')} first={true} />

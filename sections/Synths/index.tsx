@@ -4,7 +4,17 @@ import ethers from 'ethers';
 import orderBy from 'lodash/orderBy';
 import findIndex from 'lodash/findIndex';
 import { useTranslation } from 'react-i18next';
-
+import { utils, Wallet } from 'ethers';
+import {
+	BarChart,
+	Bar,
+	Cell,
+	XAxis,
+	YAxis,
+	CartesianGrid,
+	Tooltip,
+	Legend,
+  } from "recharts"
 import SectionHeader from 'components/SectionHeader';
 import { MAX_PAGE_WIDTH, COLORS } from 'constants/styles';
 import { SNXJSContext, SUSDContext, ProviderContext } from 'pages/_app';
@@ -28,11 +38,103 @@ const SynthsSection: FC<{}> = () => {
 	const snxjs = useContext(SNXJSContext);
 	const { sUSDPrice } = useContext(SUSDContext);
 	const provider = useContext(ProviderContext);
-
+	const [data, setData] = useState();
+	const [totalValue, setTotalValue] = useState(0);
 	useEffect(() => {
- 
+
+
+		const strToBytes = (text, length = 32) => {
+			if (text.length > length) {
+			  throw new Error(`Cannot convert String of ${text.length} to bytes${length} (it's too big)`);
+			}
+			// extrapolated from https://github.com/ethers-io/ethers.js/issues/66#issuecomment-344347642
+			let result = utils.hexlify(utils.toUtf8Bytes(text));
+			while (result.length < 2 + length * 2) {
+			  result += '0';
+			}
+			return utils.arrayify(result);
+		  };
+
+		const getDistributionDataTop10 = async (chart=false) => {
+			const toUtf8Bytes = strToBytes;
+			console.log(toUtf8Bytes)
+			const synths = snxjs.contractSettings.synths.map(({ name }) => name)
+			let totalInUSD = 0
+			let snxPrice = await snxjs.ExchangeRates.rateForCurrency(
+			  toUtf8Bytes("OKS")
+			)
+			snxPrice = Number(snxPrice.toString())
+			snxPrice = snxPrice / 1e18
+			let results = await Promise.all(
+			  synths.map(async synth => {
+				const totalAmount = await snxjs[synth].totalSupply()
+		  
+				const totalSupply = Number(totalAmount) / 1e18
+		  
+				let rateForSynth = await snxjs.ExchangeRates.rateForCurrency(
+				  toUtf8Bytes(synth)
+				)
+				rateForSynth = rateForSynth.toString()
+				rateForSynth = Number(rateForSynth) / 1e18
+		  
+				const totalSupplyInUSD = rateForSynth * totalSupply
+				totalInUSD += totalSupplyInUSD
+				const rateIsFrozen = await snxjs.ExchangeRates.rateIsFrozen(
+				  toUtf8Bytes(synth)
+				)
+				//console.log(synth, rateIsFrozen)
+					
+				return {
+				  synth,
+				  totalAmount,
+				  totalSupply,
+				  rateForSynth,
+				  totalSupplyInUSD,
+				  rateIsFrozen,
+				  totalInUSD
+				}
+			  })
+			)
+			  
+			results = results.sort((a, b) =>
+			  a.totalSupplyInUSD > b.totalSupplyInUSD ? -1 : 1
+			)
+		  
+			const resultsWithValues = results.filter(
+			  ({ totalSupplyInUSD }) => Number(totalSupplyInUSD) > 10
+			)
+		  
+			const datasets = resultsWithValues
+			  .slice(0, 10)
+			  .map(({ totalSupplyInUSD }) => totalSupplyInUSD)
+		  
+			const labels = resultsWithValues.slice(0, 10).map(({ synth }) => synth)
+		   
+			 
+			return  {datasets, labels, results, totalInUSD}
+		  }
+
+		const runAsync = async () => {
+			const { datasets, labels, results, totalInUSD} = await getDistributionDataTop10(true)
+			const totalValue = totalInUSD; //pieChartData.reduce((acc, { value }) => acc + value, 0);
+			setTotalValue(totalValue);
+
+			const filteredData = datasets.map((amount, index) => {
+			  return { amount, name: labels[index] }
+			})
+			  
+			setData({chartData: filteredData, results:results})
+		  }
+		  runAsync().catch((err) => {
+			  console.error("Error calling getDistributionDataTop10")
+			  console.error(err)
+		  })
+
 	}, []);
-	const totalValue = pieChartData.reduce((acc, { value }) => acc + value, 0);
+
+	if (!data) {
+		return <SynthsCharts style={{margin:'0 auto', display:'flex'}}>loading...</SynthsCharts>
+	  }	
 	return (
 		<>
 			<SectionHeader title={t('homepage.section-header.synths')} />
@@ -43,33 +145,25 @@ const SynthsSection: FC<{}> = () => {
 				color={COLORS.green}
 				numberStyle="currency0"
 			/>
-			<SynthsCharts>
-				<SynthsBarChart data={barChartData} />
-				<SynthsPieChart data={pieChartData} />
+			<SynthsCharts style={{margin:'0 auto', display:'flex'}}>
+				
+				<BarChart
+				width={800}
+				height={300}
+				data={data.chartData}
+				
+				>
+				<CartesianGrid strokeDasharray="3 3" />
+				<XAxis dataKey="name" />
+				<YAxis />
+				<Tooltip />
+				<Legend />
+				<Bar dataKey="amount" fill="#31D8A4" />
+			</BarChart>				
+				 
+
 			</SynthsCharts>
-			<SubsectionHeader>{t('homepage.top-synths.title')}</SubsectionHeader>
-			<StatsRow>
-				{pieChartData.map(({ name, totalSupply, value }: SynthTotalSupply, index: number) => {
-					if (index < NUMBER_OF_TOP_SYNTHS) {
-						return (
-							<DoubleStatsBox
-								key={name}
-								title={name}
-								subtitle={subtitleText(name)}
-								firstMetricTitle={t('homepage.top-synths.price')}
-								firstMetricStyle="currency2"
-								firstMetric={name === 'sUSD' ? sUSDPrice : value / (totalSupply ?? 0)}
-								firstColor={index === 0 ? COLORS.pink : COLORS.green}
-								secondMetricTitle={t('homepage.top-synths.marketCap')}
-								secondMetric={value}
-								secondColor={index === 2 ? COLORS.pink : COLORS.green}
-								secondMetricStyle="currency0"
-							/>
-						);
-					}
-					return null;
-				})}
-			</StatsRow>
+		<br ></br>
 		</>
 	);
 };
@@ -77,7 +171,7 @@ const SynthsSection: FC<{}> = () => {
 const SynthsCharts = styled.div`
 	max-width: ${MAX_PAGE_WIDTH}px;
 	display: flex;
-	margin: 20px auto;
+	background: #09092f;
 	justify-content: space-between;
 	@media only screen and (max-width: 854px) {
 		display: block;
