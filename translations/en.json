@@ -159,17 +159,17 @@
 		"total-trading-volume": {
 			"title": "TOTAL TRADING VOLUME",
 			"subtext": "Historical trading volume for all Synths",
-			"infoData": "The total trading volume only shows data from after the Archernar release on <linkText>block 9,518,914 (Feb 20, 2020).</linkText> Prior to this release significant volume was generated via <linkText2>front running</linkText2> attempts."
+			"infoData": "The total trading volume generated on Oikos Exchange"
 		},
 		"total-trading-fees": {
 			"title": "TOTAL TRADING FEES",
 			"subtext": "Historical trading fees for all Synths",
-			"infoData": "The total trading fees only shows data from after the Archernar release on <linkText>block 9,518,914 (Feb 20, 2020).</linkText> Prior to this release significant volume was generated via <linkText2>front running</linkText2> attempts."
+			"infoData": "The total trading fees generated on Oikos Exchange."
 		},
 		"total-number-of-trades": {
 			"title": "TOTAL NUMBER OF TRADES",
 			"subtext": "Total historical trades for all Synths",
-			"infoData": "The total number of trades only shows data from after the Archernar release on <linkText>block 9,518,914 (Feb 20, 2020).</linkText> Prior to this release significant volume was generated via <linkText2>front running</linkText2> attempts."
+			"infoData": "The total number of trades generated on Oikos Exchange."
 		},
 		"24hr-exchange-volume": {
 			"title": "24HR EXCHANGE VOLUME",
@@ -177,7 +177,7 @@
 		},
 		"trading-volume": {
 			"title": "TRADING VOLUME",
-			"infoData": "Each day we capture trading volume in the Synthetix protocol via the <linkText>Synthetix exchanges subgraph</linkText> using the \"DailyTotal\" entity. <newParagraph>The annual chart includes data from before the Archernar release on <linkText2 href={etherscanArchernarBlock}>block 9,518,914 (Feb 20, 2020).</linkText2> Prior to this release significant volume was generated via <linkText3 href={frontRunningWiki}>front running</linkText3> attempts.</newParagraph>"
+			"infoData": "Each day we capture trading volume in the Oikos protocol via the <linkText>Oikos exchanges subgraph</linkText> using the \"DailyTotal\" entity."
 		},
 		"total-number-unique-traders": {
 			"title": "TOTAL NUMBER OF UNIQUE TRADERS",
