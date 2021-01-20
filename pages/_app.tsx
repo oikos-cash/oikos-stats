@@ -1,4 +1,4 @@
-import { createContext, FC, createRef, useState, RefObject } from 'react';
+import { createContext, FC, createRef, useState, RefObject, useEffect } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ethers } from 'ethers';
@@ -24,6 +24,9 @@ export const headersAndScrollRef: { [key: string]: RefObject<unknown> } = {
 	OPTIONS: createRef(),
 };
 
+ 
+
+
 const provider = {};// new ethers.providers.InfuraProvider(
 	//'homestead',
 	//process.env.NEXT_PUBLIC_INFURA_KEY
@@ -44,9 +47,10 @@ export const SNXContext = createContext({
 	setSNXStaked: (num: number) => null,
 });
 
-const snxjs = new SynthetixJs({ networkId:1 });
+const snxjs = new SynthetixJs({ networkId:1, a:1 });
 
 export const SNXJSContext = createContext(snxjs);
+
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
 	const { t } = useTranslation();

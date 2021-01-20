@@ -43,12 +43,14 @@ const Trading: FC = () => {
 				snxData.exchanges.since({ minTimestamp: oneDayAgo }),
 				snxData.exchanges.total(),
 			]);
+
+			console.log({exchanges})
 			// @ts-ignore
 			const last24Hours = exchanges.reduce((acc, { fromAmountInUSD }) => acc + fromAmountInUSD, 0);
 			 
 			setTotalDailyTradingVolume(last24Hours);
 			setTotalTradingVolume(exchangeVolumeData.exchangeUSDTally);
-			setTotalTradingFees(exchangeVolumeData.exchangeUSDTally * 0.03);
+			setTotalTradingFees(exchangeVolumeData.exchangeUSDTally * 0.003);
 			setTotalTrades(exchangeVolumeData.trades);
 			setTotalUsers(allTimeData.exchangers);
 		};
