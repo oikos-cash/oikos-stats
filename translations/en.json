@@ -19,20 +19,20 @@
 		},
 		"snx-price": {
 			"title": "OKS PRICE",
-			"infoData": "The price of OKS is obtained from Chainlink oracles, which are retrieved using the <sjslink>{{sjsLinkText}}</sjslink>. <newParagraph>For the chart, the data is collected from the \"DailyOKSPrice\" and \"FifteenMinuteOKSPrice\" entities in the Synthetix rates subgraph <viewPlaygroundLink>{{viewPlaygroundLinkText}}</viewPlaygroundLink>.</newParagraph>",
-			"sjsLinkText": "synthetix-js repo",
+			"infoData": "The price of OKS is obtained from Chainlink oracles, which are retrieved using the <sjslink>{{sjsLinkText}}</sjslink>. <newParagraph>For the chart, the data is collected from the \"DailyOKSPrice\" and \"FifteenMinuteOKSPrice\" entities in the Oikos rates subgraph <viewPlaygroundLink>{{viewPlaygroundLinkText}}</viewPlaygroundLink>.</newParagraph>",
+			"sjsLinkText": "oikos-js repo",
 			"viewPlaygroundLinkText": "(view playground)"
 		},
 		"snx-market-cap": {
 			"title": "OKS MARKET CAP",
 			"subtext": "Fully diluted market cap for OKS",
 			"infoData": "The market cap is calculated using the price of OKS from Chainlink oracles multiplied against the total supply of OKS tokens (fully diluted including escrow). These data points are retrieved using the <linkText>{{sjsLinkText}}</linkText>.",
-			"sjsLinkText": "synthetix-js repo"
+			"sjsLinkText": "oikos-js repo"
 		},
 		"susd-price": {
 			"title": "sUSD PRICE",
-			"subtext": "Price of sUSD on Curve",
-			"infoData": "The price of sUSD is calculated using the peg from Curve, which holds the majority of sUSD in a liquidity pool of various stablecoins. The <linkText>{{curveDocLinkText}}</linkText> explains how the peg is calculated.",
+			"subtext": "Price of sUSD on Oikos Swap V2",
+			"infoData": "The price of sUSD is calculated using the peg from Oikos Swap V2, which holds the majority of sUSD in a USDT based liquidity pool. The peg is calculated using the ratio between the reserves of each token in the pool.",
 			"curveDocLinkText": "Curve documentation"
 		},
 		"snx-volume": {
@@ -43,20 +43,20 @@
 			"title": "TOTAL OKS STAKED",
 			"subtext": "The total value of all staked OKS",
 			"infoData": "To calculate the value of OKS tokens staked we sample the top 1,000 OKS stakers using the <sDataLink>{{sDataLinkText}}</sDataLink> and then determine what proportion of OKS they have staked.<newParagraph>We then multiply this proportion across the total supply of OKS tokens which we get from the <sjsLink>{{sjsLinkText}}</sjsLink>.</newParagraph><newParagraph>Taking a small sample produces a result that is very close to taking the entire set of holders and allows the page to load faster.</newParagraph>",
-			"sDataLinkText": "Synthetix data repo",
-			"sjsLinkText": "synthetix-js repo"
+			"sDataLinkText": "Oikos data repo",
+			"sjsLinkText": "oikos-js repo"
 		},
 		"network-cratio": {
 			"title": "NETWORK C-RATIO",
 			"subtext": "The aggregate collateralization ratio of all OKS wallets",
 			"infoData": "To calculate the network C-Ratio we use the following formula \"Total OKS Supply * OKSPrice / Total Issued Synths.\" We get this data from the <sjsLink>{{sjsLinkText}}</sjsLink>.",
-			"sjsLinkText": "synthetix-js repo"
+			"sjsLinkText": "oikos-js repo"
 		},
 		"active-cratio": {
 			"title": "ACTIVE C-RATIO",
 			"subtext": "The aggregate collateralization ratio of OKS wallets that are currently staking",
 			"infoData": "To calculate the C-Ratio of active stakers we sample the top 1,000 OKS stakers using the <sjsLink>{{sDataLinkText}}</sjsLink> and then determine the cumulative C-Ratio using their collateral-to-debt ratio.<newParagraph>Taking a small sample produces a result that is very close to taking the entire set of holders and allows the page to load faster.</newParagraph>",
-			"sDataLinkText": "Synthetix data repo"
+			"sDataLinkText": "Oikos data repo"
 		},
 		"snx-holders": {
 			"title": "OKS HOLDERS",
