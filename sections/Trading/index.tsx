@@ -50,7 +50,7 @@ const Trading: FC = () => {
 			 
 			setTotalDailyTradingVolume(last24Hours);
 			setTotalTradingVolume(exchangeVolumeData.exchangeUSDTally);
-			setTotalTradingFees(exchangeVolumeData.exchangeUSDTally * 0.003);
+			setTotalTradingFees(exchangeVolumeData.exchangeUSDTally * 0.03);
 			setTotalTrades(exchangeVolumeData.trades);
 			setTotalUsers(allTimeData.exchangers);
 		};
