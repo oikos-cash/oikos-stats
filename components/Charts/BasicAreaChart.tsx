@@ -73,11 +73,6 @@ const BasicAreaChart: FC<BasicAreaChartProps> = ({
 				<YAxis
 					hide={true}
 					type="number"
-					domain={
-						Math.abs(percentChange || 0) < 0.01
-							? [(dataMin) => 0.01 - Math.abs(dataMin), (dataMax) => dataMax * 1]
-							: [(dataMin) => 0 - Math.abs(dataMin), (dataMax) => dataMax * 1]
-					}
 				/>
 				<Tooltip
 					labelFormatter={(created) => {
