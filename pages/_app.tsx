@@ -47,7 +47,7 @@ export const SNXContext = createContext({
 	setSNXStaked: (num: number) => null,
 });
 
-const snxjs = new SynthetixJs({ networkId:1, a:1 });
+const snxjs = new SynthetixJs({ networkId:1 });
 
 export const SNXJSContext = createContext(snxjs);
 
@@ -122,14 +122,14 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
 				{/* open graph */}
 				<meta property="og:url" content="https://stats.synthetix.io/" />
 				<meta property="og:type" content="website" />
-				<meta property="og:title" content="Synthetix Stats" />
+				<meta property="og:title" content="Oikos Stats" />
 				<meta property="og:description" content="Synthetix protocol statistics and network data" />
 				<meta property="og:image" content="/static/images/stats-social.jpeg" />
-				<meta property="og:image:alt" content="Synthetix Stats" />
-				<meta property="og:site_name" content="Synthetix Stats" />
+				<meta property="og:image:alt" content="Oikos Stats" />
+				<meta property="og:site_name" content="Oikos Stats" />
 				{/* twitter */}
 				<meta name="twitter:image" content="/static/images/stats-social.jpeg" />
-				<meta name="twitter:url" content="https://stats.synthetix.io" />
+				<meta name="twitter:url" content="https://stats.oikos.cash" />
 				<link rel="icon" href="/images/favicon.png" />
 				<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter" />
 			</Head>
