@@ -115,7 +115,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
 				<meta name="msapplication-square310x310logo" content="/favicon/mstile-310x310.png" />
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
-				<meta name="description" content="Synthetix protocol statistics and network data" />
+				<meta name="description" content="Oikos protocol statistics and network data" />
 				<meta name="twitter:card" content="summary_large_image" />
 				<meta name="twitter:site" content="@oikos_cash" />
 				<meta name="twitter:creator" content="@oikos_cash" />

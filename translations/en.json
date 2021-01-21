@@ -1,15 +1,15 @@
 {
 	"meta": {
-		"description": "Synthetix Stats description",
+		"description": "Oikos Stats description",
 		"og": {
-			"title": "Synthetix Stats",
-			"description": "Synthetix Stats description",
-			"image-alt": "Synthetix Stats",
-			"site-name": "Synthetix Stats"
+			"title": "Oikos Stats",
+			"description": "Oikos Stats description",
+			"image-alt": "Oikos Stats",
+			"site-name": "Oikos Stats"
 		}
 	},
 	"homepage": {
-		"page-title": "Synthetix Stats | Synthetix protocol data",
+		"page-title": "Oikos Stats | Oikos protocol data",
 		"section-header": {
 			"network": "NETWORK",
 			"options": "OPTIONS",
@@ -62,7 +62,7 @@
 			"title": "OKS HOLDERS",
 			"subtext": "Total number of OKS holders",
 			"infoData": "The number of OKS holders is obtained from the <linkText>{{subgraphLinkText}}</linkText>.",
-			"subgraphLinkText": "Synthetix subgraph"
+			"subgraphLinkText": "Oikos subgraph"
 		},
 		"susd-distribution": {
 			"title": "sUSD DISTRIBUTION",
@@ -79,27 +79,27 @@
 		"largest-active-binary-market": {
 			"title": "LARGEST ACTIVE BINARY MARKET (USD)",
 			"subtext": "The largest active binary options market is {{synth}} > {{price}} expiring at {{-date}}",
-			"infoData": "To get the largest active binary options market, we pull all the \"Market\" entities from the <linkText>Synthetix options subgraph,</linkText> filter out any markets past their \"expiryDate\" and then sort them by \"poolSize\" to get the largest."
+			"infoData": "To get the largest active binary options market, we pull all the \"Market\" entities from the <linkText>Oikos options subgraph,</linkText> filter out any markets past their \"expiryDate\" and then sort them by \"poolSize\" to get the largest."
 		},
 		"largest-binary-market-to-date": {
 			"title": "LARGEST BINARY MARKET TO DATE (USD)",
 			"subtext": "The current number of active binary options markets",
-			"infoData": "To get the largest binary options market to date, we pull all the \"Market\" entities from the <linkText>Synthetix options subgraph</linkText> and sort them by \"poolSize\" to get the largest."
+			"infoData": "To get the largest binary options market to date, we pull all the \"Market\" entities from the <linkText>Oikos options subgraph</linkText> and sort them by \"poolSize\" to get the largest."
 		},
 		"number-of-active-binary-options-markets": {
 			"title": "NUMBER OF ACTIVE BINARY OPTIONS MARKETS",
 			"subtext": "The current number of active binary options markets",
-			"infoData": "To get the number of active binary options market, we pull all the \"Market\" entities from the <linkText>Synthetix options subgraph,</linkText>  filter out any markets past their \"expiryDate\" and then count the number of markets remaining."
+			"infoData": "To get the number of active binary options market, we pull all the \"Market\" entities from the <linkText>Oikos options subgraph,</linkText>  filter out any markets past their \"expiryDate\" and then count the number of markets remaining."
 		},
 		"total-pooled-in-binary-options": {
 			"title": "TOTAL POOLED IN BINARY OPTIONS (USD)",
 			"subtext": "The total amount of capital pooled in active binary options markets",
-			"infoData": "To get the total amount pooled in active binary options market, we pull all the \"Market\" entities from the <linkText>Synthetix options subgraph,</linkText> filter out any markets past their \"expiryDate\" and then sum the \"poolSize\" of the remaining active markets."
+			"infoData": "To get the total amount pooled in active binary options market, we pull all the \"Market\" entities from the <linkText>Oikos options subgraph,</linkText> filter out any markets past their \"expiryDate\" and then sum the \"poolSize\" of the remaining active markets."
 		},
 		"trades-in-binary-options-24-hrs": {
 			"title": "TRADES OVER 24 HOURS IN BINARY OPTIONS",
 			"subtext": "The total number of trades over the past 24 hours in binary options markets",
-			"infoData": "To get the total number of trades over the past 24 hours in binary options markets, we pull all the \"OptionTransaction\" entities from the <linkText>Synthetix options subgraph</linkText> within the past 24 hours and then count all the items."
+			"infoData": "To get the total number of trades over the past 24 hours in binary options markets, we pull all the \"OptionTransaction\" entities from the <linkText>Oikos options subgraph</linkText> within the past 24 hours and then count all the items."
 		},
 		"options-pie-chart": {
 			"title": "BINARY MARKETS DOMINANCE",
@@ -137,7 +137,7 @@
 		},
 		"total-active-stakers": {
 			"title": "TOTAL ACTIVE STAKERS",
-			"infoData": "The number of total active stakers is obtained from the \"TotalActiveStaker\" entity from the <linkText>Synthetix subgraph.</linkText> The chart data shows the \"TotalDailyActiveStaker\" entity over time."
+			"infoData": "The number of total active stakers is obtained from the \"TotalActiveStaker\" entity from the <linkText>Oikos subgraph.</linkText> The chart data shows the \"TotalDailyActiveStaker\" entity over time."
 		},
 		"total-synths": {
 			"title": "TOTAL SYNTHS",
