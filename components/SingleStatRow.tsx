@@ -16,13 +16,14 @@ const SingleStatRow: FC<SingleStatRowProps> = ({ text, subtext, color, num, numb
 	const formattedNumber = getFormattedNumber(num, numberStyle);
 	return (
 		<SingleStatRowContainer>
-			<SingleStatsLeft>
+			<SingleStatsLeft style={{marginTop:"80px"}}>
 				<SingleStatsText>{text}</SingleStatsText>
+				<SingleStatsNumber color={color} >{formattedNumber}</SingleStatsNumber>
+
 				<SingleStatsSubtext>{subtext}</SingleStatsSubtext>
 			</SingleStatsLeft>
-			<SingleStatsRight>
-				<SingleStatsNumber color={color}>{formattedNumber}</SingleStatsNumber>
-			</SingleStatsRight>
+			<SingleStatsLeft>
+			</SingleStatsLeft>
 		</SingleStatRowContainer>
 	);
 };

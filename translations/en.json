@@ -103,7 +103,7 @@
 		},
 		"options-pie-chart": {
 			"title": "BINARY MARKETS DOMINANCE",
-			"subtext": "Distribution of Synths within the Synthetix protocol"
+			"subtext": "Distribution of Synths within the Oikos protocol"
 		},
 		"current-staking-apy": {
 			"title": "CURRENT OKS STAKING APY",
@@ -154,7 +154,7 @@
 		},
 		"synth-pie-chart": {
 			"title": "SYNTH DOMINANCE",
-			"subtext": "Distribution of Synths within the Synthetix protocol"
+			"subtext": "Distribution of Synths within the Oikos protocol"
 		},
 		"total-trading-volume": {
 			"title": "TOTAL TRADING VOLUME",

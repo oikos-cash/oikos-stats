@@ -8,6 +8,8 @@ import { utils, Wallet } from 'ethers';
 import {
 	BarChart,
 	Bar,
+	PieChart,
+	Pie,
 	Cell,
 	XAxis,
 	YAxis,
@@ -33,13 +35,13 @@ const subtitleText = (name: string) => `Price and market cap for ${name}`;
 
 const SynthsSection: FC<{}> = () => {
 	const { t } = useTranslation();
-	const [pieChartData, setPieChartData] = useState<SynthTotalSupply[]>([]);
+	const [pieChartData, setPieChartData] = useState();
 	const [barChartData, setBarChartData] = useState<OpenInterest>({});
 	const snxjs = useContext(SNXJSContext);
 	const { sUSDPrice } = useContext(SUSDContext);
 	const provider = useContext(ProviderContext);
 	const [data, setData] = useState();
-	const [totalValue, setTotalValue] = useState(0);
+	const [totalValue, setTotalValue] = useState(0); 
 	useEffect(() => {
 
 
@@ -114,16 +116,22 @@ const SynthsSection: FC<{}> = () => {
 			return  {datasets, labels, results, totalInUSD}
 		  }
 
-		const runAsync = async () => {
+		  const runAsync = async () => {
 			const { datasets, labels, results, totalInUSD} = await getDistributionDataTop10(true)
 			const totalValue = totalInUSD; //pieChartData.reduce((acc, { value }) => acc + value, 0);
 			setTotalValue(totalValue);
 
 			const filteredData = datasets.map((amount, index) => {
+
 			  return { amount, name: labels[index] }
 			})
 			  
+			const pieData = filteredData.map(function(row) {
+				return { value : row.amount, name : row.name }
+			 })
+			 
 			setData({chartData: filteredData, results:results})
+			setPieChartData(pieData);
 		  }
 		  runAsync().catch((err) => {
 			  console.error("Error calling getDistributionDataTop10")
@@ -132,7 +140,7 @@ const SynthsSection: FC<{}> = () => {
 
 	}, []);
 
-	if (!data) {
+	if (!data || !pieChartData) {
 		return <SynthsCharts style={{margin:'0 auto', display:'flex'}}>loading...</SynthsCharts>
 	  }	
 	return (
@@ -144,23 +152,14 @@ const SynthsSection: FC<{}> = () => {
 				num={totalValue}
 				color={COLORS.green}
 				numberStyle="currency0"
+				style={{margin:'0 auto'}}
 			/>
-			<SynthsCharts style={{margin:'0 auto', display:'flex'}}>
+
+			<SynthsCharts style={{margin:'0 auto', display:'flex', width: '100%'}}>
 				
-				<BarChart
-				width={800}
-				height={300}
-				data={data.chartData}
+				<SynthsPieChart data={pieChartData} />	
 				
-				>
-				<CartesianGrid strokeDasharray="3 3" />
-				<XAxis dataKey="name" />
-				<YAxis />
-				<Tooltip />
-				<Legend />
-				<Bar dataKey="amount" fill="#31D8A4" />
-			</BarChart>				
-				 
+
 
 			</SynthsCharts>
 		<br ></br>
