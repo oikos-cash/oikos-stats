@@ -124,11 +124,11 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
 				<meta property="og:type" content="website" />
 				<meta property="og:title" content="Oikos Stats" />
 				<meta property="og:description" content="Oikos protocol statistics and network data" />
-				<meta property="og:image" content="/static/images/stats-social.jpeg" />
+				<meta property="og:image" content="/static/images/stats-social.png" />
 				<meta property="og:image:alt" content="Oikos Stats" />
 				<meta property="og:site_name" content="Oikos Stats" />
 				{/* twitter */}
-				<meta name="twitter:image" content="/static/images/stats-social.jpeg" />
+				<meta name="twitter:image" content="/static/images/stats-social.png" />
 				<meta name="twitter:url" content="https://stats.oikos.cash" />
 				<link rel="icon" href="/images/favicon.png" />
 				<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter" />
