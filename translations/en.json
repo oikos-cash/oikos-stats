@@ -181,7 +181,7 @@
 		},
 		"total-number-unique-traders": {
 			"title": "TOTAL NUMBER OF UNIQUE TRADERS",
-			"subtext": "Ethereum addresses that have traded Synths"
+			"subtext": "Tron addresses that have traded Synths"
 		},
 		"average-daily-traders": {
 			"title": "AVERAGE DAILY TRADERS",
