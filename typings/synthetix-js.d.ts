@@ -1,10 +1,10 @@
-declare module 'oikos-js' {
+declare module '@oikos/oikos-js-bsc' {
 	import { JsonRpcSigner, Web3Provider } from 'ethers/providers';
 	import { ethers } from 'ethers';
 	import { BigNumberish } from 'ethers/utils';
 
 	export interface ContractSettings {
-		networkId: 1 | 3 | 4 | 42;
+		networkId: 56 | 97 ;
 		signer?: JsonRpcSignerWithNextAddress;
 	}
 
@@ -32,7 +32,7 @@ declare module 'oikos-js' {
 		Portis: JsonRpcSignerWithNextAddress;
 	};
 
-	export class SynthetixJs {
+	export class OikosJs {
 		constructor(contractSettings: ContractSettings);
 
 		contractSettings: {
@@ -58,7 +58,7 @@ declare module 'oikos-js' {
 				suspended: boolean;
 			}>;
 		};
-		Synthetix: {
+		Oikos: {
 			contract: any;
 			exchange: (
 				quoteCurrencyKey: string,
@@ -70,7 +70,7 @@ declare module 'oikos-js' {
 				}
 			) => Promise<ethers.ContractTransaction>;
 		};
-		sUSD: {
+		oUSD: {
 			contract: any;
 			approve: any;
 		};
