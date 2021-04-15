@@ -1,4 +1,4 @@
-import { pageResults } from '@oikos/oikos-data';
+import { pageResults } from '@oikos/oikos-data-bsc';
 
 const aaveSubgraphURL = 'https://api.thegraph.com/subgraphs/name/aave/protocol-multy-raw';
 const uniswapV2SubgraphURL = 'https://thegraph.oikos.cash/subgraphs/name/oikos/swap-V2';
