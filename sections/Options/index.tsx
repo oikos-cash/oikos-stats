@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import snxData from '@oikos/oikos-data';
+import oksData from '@oikos/oikos-data';
 import findIndex from 'lodash/findIndex';
 import { format } from 'date-fns';
 import { useTranslation, Trans } from 'react-i18next';
@@ -28,8 +28,8 @@ const Options: FC = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const [unformattedOptionTransactions, unformattedMarkets] = await Promise.all([
-				snxData.binaryOptions.optionTransactions(),
-				snxData.binaryOptions.markets({ max: 5000 }),
+				oksData.binaryOptions.optionTransactions(),
+				oksData.binaryOptions.markets({ max: 5000 }),
 			]);
 			const now = new Date();
 			const sortedMarkets = unformattedMarkets.sort((a: OptionsMarket, b: OptionsMarket) => {

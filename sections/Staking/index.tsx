@@ -1,5 +1,5 @@
 import { FC, useState, useEffect, useContext, useMemo } from 'react';
-import snxData from '@oikos/oikos-data';
+import oksData from '@oikos/oikos-data-bsc';
 import { useTranslation, Trans } from 'react-i18next';
 import { BigNumber } from 'ethers';
 import { format } from 'date-fns';
@@ -10,7 +10,7 @@ import StatsBox from 'components/StatsBox';
 import AreaChart from 'components/Charts/AreaChart';
 
 import { COLORS } from 'constants/styles';
-import { SNXJSContext, SNXContext, SUSDContext } from 'pages/_app';
+import { OKSJSContext, OKSContext, OUSDContext } from 'pages/_app';
 import { FeePeriod, AreaChartData, ChartPeriod, ActiveStakersData } from 'types/data';
 import { formatIdToIsoString } from 'utils/formatter';
 import { NewParagraph, LinkText } from 'components/common';
@@ -23,15 +23,15 @@ const Staking: FC = () => {
 	const [stakersChartPeriod, setStakersChartPeriod] = useState<ChartPeriod>('Y');
 	const [totalActiveStakers, setTotalActiveStakers] = useState<number | null>(null);
 	const [stakersChartData, setStakersChartData] = useState<AreaChartData[]>([]);
-	const snxjs = useContext(SNXJSContext);
-	const { SNXPrice, SNXStaked } = useContext(SNXContext);
-	const { sUSDPrice } = useContext(SUSDContext);
+	const oksjs = useContext(OKSJSContext);
+	const { OKSPrice, OKSStaked } = useContext(OKSContext);
+	const { oUSDPrice } = useContext(OUSDContext);
 
 	useEffect(() => {
 		const fetchFeePeriod = async (period: number): Promise<FeePeriod> => {
-			console.log({snxjs})
-			const { formatEther } = snxjs.utils;
-			const feePeriod = await snxjs.FeePool.recentFeePeriods(period);
+			console.log({oksjs})
+			const { formatEther } = oksjs.utils;
+			const feePeriod = await oksjs.FeePool.recentFeePeriods(period);
 			console.log({feePeriod})
 			return {
 				startTime: BigNumber.from(feePeriod.startTime).toNumber() * 1000 || 0,
@@ -65,11 +65,11 @@ const Staking: FC = () => {
 	const fetchNewChartData = async (fetchPeriod: ChartPeriod) => {
 		let newStakersData = [];
 		if (fetchPeriod === 'W') {
-			newStakersData = await snxData.snx.aggregateActiveStakers({ max: 7 });
+			newStakersData = await oksData.snx.aggregateActiveStakers({ max: 7 });
 		} else if (fetchPeriod === 'M') {
-			newStakersData = await snxData.snx.aggregateActiveStakers({ max: 30 });
+			newStakersData = await oksData.snx.aggregateActiveStakers({ max: 30 });
 		} else if (fetchPeriod === 'Y') {
-			newStakersData = await snxData.snx.aggregateActiveStakers({ max: 365 });
+			newStakersData = await oksData.snx.aggregateActiveStakers({ max: 365 });
 		}
 		newStakersData = newStakersData.reverse();
 
@@ -82,25 +82,26 @@ const Staking: FC = () => {
 		fetchNewChartData(stakersChartPeriod);
 	}, [stakersChartPeriod]);
 
+	console.log(OKSStaked)
 	const stakingPeriods: ChartPeriod[] = ['W', 'M', 'Y'];
-	const SNXValueStaked = useMemo(() => (SNXPrice ?? 0) * (SNXStaked ?? 0), [SNXPrice, SNXStaked]);
+	const OKSValueStaked = useMemo(() => (OKSPrice ?? 0) * (OKSStaked ?? 0), [OKSPrice, OKSStaked]);
 	console.log({totalActiveStakers})
 	return (
 		<>
 			<SectionHeader title="STAKING" />
 			<StatsRow>
 				<StatsBox
-					key="SNXSTKAPY"
+					key="OKSSTKAPY"
 					title={t('homepage.current-staking-apy.title')}
 					num={
-						sUSDPrice != null &&
-						SNXPrice != null &&
+						oUSDPrice != null &&
+						OKSPrice != null &&
 						currentFeePeriod != null &&
-						SNXValueStaked != null
-							? (((sUSDPrice ?? 0) * currentFeePeriod.feesToDistribute +
-									(SNXPrice ?? 0) * currentFeePeriod.rewardsToDistribute) *
+						OKSValueStaked != null
+							? (((oUSDPrice ?? 0) * currentFeePeriod.feesToDistribute +
+									(OKSPrice ?? 0) * currentFeePeriod.rewardsToDistribute) *
 									52) /
-							  SNXValueStaked
+							  OKSValueStaked
 							: null
 					}
 					percentChange={null}
@@ -111,11 +112,11 @@ const Staking: FC = () => {
 					infoData={t('homepage.current-staking-apy.infoData')}
 				/>
 				<StatsBox
-					key="SNXSTKAPYSUSD"
+					key="OKSSTKAPYOUSD"
 					title={t('homepage.current-staking-apy-susd.title')}
 					num={
-						sUSDPrice != null && currentFeePeriod != null && SNXValueStaked != null
-							? ((sUSDPrice ?? 0) * currentFeePeriod.feesToDistribute * 52) / SNXValueStaked
+						oUSDPrice != null && currentFeePeriod != null && OKSValueStaked != null
+							? ((oUSDPrice ?? 0) * currentFeePeriod.feesToDistribute * 52) / OKSValueStaked
 							: null
 					}
 					percentChange={null}
@@ -126,16 +127,16 @@ const Staking: FC = () => {
 					infoData={null}
 				/>
 				<StatsBox
-					key="SNXSTKAPYSNX"
-					title={t('homepage.current-staking-apy-snx.title')}
+					key="OKSSTKAPYOKS"
+					title={t('homepage.current-staking-apy-oks.title')}
 					num={
-						SNXPrice != null && currentFeePeriod != null && SNXValueStaked != null
-							? (((SNXPrice ?? 0) * currentFeePeriod?.rewardsToDistribute ?? 0) * 52) /
-							  SNXValueStaked
+						OKSPrice != null && currentFeePeriod != null && OKSValueStaked != null
+							? (((OKSPrice ?? 0) * currentFeePeriod?.rewardsToDistribute ?? 0) * 52) /
+							  OKSValueStaked
 							: null
 					}
 					percentChange={null}
-					subText={t('homepage.current-staking-apy-snx.subtext')}
+					subText={t('homepage.current-staking-apy-oks.subtext')}
 					color={COLORS.pink}
 					numberStyle="percent2"
 					numBoxes={3}
@@ -147,8 +148,8 @@ const Staking: FC = () => {
 					key="CRRNTFEERWPOOLUSD"
 					title={t('homepage.current-fee-pool.title')}
 					num={
-						sUSDPrice != null && currentFeePeriod != null && sUSDPrice != null
-							? (sUSDPrice ?? 0) * currentFeePeriod.feesToDistribute
+						oUSDPrice != null && currentFeePeriod != null && oUSDPrice != null
+							? (oUSDPrice ?? 0) * currentFeePeriod.feesToDistribute
 							: null
 					}
 					percentChange={null}
@@ -171,15 +172,15 @@ const Staking: FC = () => {
 					}
 				/>
 				<StatsBox
-					key="CRRNTFEERWPOOLSNX"
-					title={t('homepage.current-fee-pool-snx.title')}
+					key="CRRNTFEERWPOOLOKS"
+					title={t('homepage.current-fee-pool-oks.title')}
 					num={
-						currentFeePeriod != null && SNXPrice != null
-							? (SNXPrice ?? 0) * currentFeePeriod.rewardsToDistribute
+						currentFeePeriod != null && OKSPrice != null
+							? (OKSPrice ?? 0) * currentFeePeriod.rewardsToDistribute
 							: null
 					}
 					percentChange={null}
-					subText={t('homepage.current-fee-pool-snx.subtext', {
+					subText={t('homepage.current-fee-pool-oks.subtext', {
 						startDate:
 							currentFeePeriod != null
 								? format(new Date(currentFeePeriod.startTime), 'MMMM dd')
@@ -191,13 +192,13 @@ const Staking: FC = () => {
 					infoData={null}
 				/>
 				<StatsBox
-					key="UNCLMFEESUSD"
+					key="UNCLMFEEOUSD"
 					title={t('homepage.unclaimed-fees-and-rewards.title')}
 					num={
-						currentFeePeriod != null && sUSDPrice != null && SNXPrice != null
-							? (sUSDPrice ?? 0) *
+						currentFeePeriod != null && oUSDPrice != null && OKSPrice != null
+							? (oUSDPrice ?? 0) *
 									(currentFeePeriod.feesToDistribute - currentFeePeriod.feesClaimed) +
-							  (SNXPrice ?? 0) *
+							  (OKSPrice ?? 0) *
 									(currentFeePeriod.rewardsToDistribute - currentFeePeriod.rewardsClaimed)
 							: null
 					}
@@ -212,11 +213,11 @@ const Staking: FC = () => {
 					infoData={null}
 				/>
 				<StatsBox
-					key="UPCOMINGFEESUSD"
+					key="UPCOMINGFEEOUSD"
 					title={t('homepage.fees-in-next-period.title')}
 					num={
-						nextFeePeriod != null && sUSDPrice != null
-							? (sUSDPrice ?? 0) * nextFeePeriod.feesToDistribute
+						nextFeePeriod != null && oUSDPrice != null
+							? (oUSDPrice ?? 0) * nextFeePeriod.feesToDistribute
 							: null
 					}
 					percentChange={null}
