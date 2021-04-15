@@ -199,7 +199,7 @@ export default {
 		{
 			constant: true,
 			inputs: [],
-			name: 'snx',
+			name: 'oks',
 			outputs: [{ internalType: 'contract IERC20', name: '', type: 'address' }],
 			payable: false,
 			stateMutability: 'view',

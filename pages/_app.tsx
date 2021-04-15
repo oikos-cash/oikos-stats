@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 
-import { SynthetixJs } from '@oikos/oikos-js';
+import { OikosJs } from '@oikos/oikos-js-bsc';
 import { ThemeProvider as SCThemeProvider } from 'styled-components';
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 
@@ -35,28 +35,28 @@ export const ProviderContext = createContext(provider);
 
 export const HeadersContext = createContext(headersAndScrollRef);
 
-export const SUSDContext = createContext({
-	sUSDPrice: null,
-	setsUSDPrice: (num: number) => null,
+export const OUSDContext = createContext({
+	oUSDPrice: null,
+	setoUSDPrice: (num: number) => null,
 });
 
-export const SNXContext = createContext({
-	SNXPrice: null,
-	setSNXPrice: (num: number) => null,
-	SNXStaked: null,
-	setSNXStaked: (num: number) => null,
+export const OKSContext = createContext({
+	OKSPrice: null,
+	setOKSPrice: (num: number) => null,
+	OKSStaked: null,
+	setOKSStaked: (num: number) => null,
 });
 
-const snxjs = new SynthetixJs({ networkId:1 });
+const oksjs = new OikosJs({ networkId:56 });
 
-export const SNXJSContext = createContext(snxjs);
+export const OKSJSContext = createContext(oksjs);
 
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
 	const { t } = useTranslation();
-	const [sUSDPrice, setsUSDPrice] = useState<number | null>(null);
-	const [SNXPrice, setSNXPrice] = useState<number | null>(null);
-	const [SNXStaked, setSNXStaked] = useState<number | null>(null);
+	const [oUSDPrice, setoUSDPrice] = useState<number | null>(null);
+	const [OKSPrice, setOKSPrice] = useState<number | null>(null);
+	const [OKSStaked, setOKSStaked] = useState<number | null>(null);
 
 	return (
 		<>
@@ -134,21 +134,21 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
 			<SCThemeProvider theme={scTheme}>
 				<MuiThemeProvider theme={muiTheme}>
 					<HeadersContext.Provider value={headersAndScrollRef}>
-						<SNXJSContext.Provider value={snxjs}>
+						<OKSJSContext.Provider value={oksjs}>
 							<ProviderContext.Provider value={provider}>
 								{/*
 	              // @ts-ignore */}
-								<SUSDContext.Provider value={{ sUSDPrice, setsUSDPrice }}>
+								<OUSDContext.Provider value={{ oUSDPrice, setoUSDPrice }}>
 									{/*
 									// @ts-ignore */}
-									<SNXContext.Provider value={{ SNXPrice, setSNXPrice, SNXStaked, setSNXStaked }}>
+									<OKSContext.Provider value={{ OKSPrice, setOKSPrice, OKSStaked, setOKSStaked }}>
 										<Layout>
 											<Component {...pageProps} />
 										</Layout>
-									</SNXContext.Provider>
-								</SUSDContext.Provider>
+									</OKSContext.Provider>
+								</OUSDContext.Provider>
 							</ProviderContext.Provider>
-						</SNXJSContext.Provider>
+						</OKSJSContext.Provider>
 					</HeadersContext.Provider>
 				</MuiThemeProvider>
 			</SCThemeProvider>

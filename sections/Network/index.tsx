@@ -1,12 +1,12 @@
 import { FC, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import snxData from '@oikos/oikos-data';
+import oksData from '@oikos/oikos-data-bsc';
 import { ethers } from 'ethers';
 import { Trans, useTranslation } from 'react-i18next';
 import { BigNumber } from "bignumber.js";
-import { getSwapV2sUSDPrice } from 'utils/customGraphQueries';
+//import { getSwapV2oUSDPrice } from 'utils/customGraphQueries';
 
-import { AreaChartData, ChartPeriod, SNXPriceData, TimeSeries, TreeMapData } from 'types/data';
+import { AreaChartData, ChartPeriod, OKSPriceData, TimeSeries, TreeMapData } from 'types/data';
 import StatsBox from 'components/StatsBox';
 import StatsRow from 'components/StatsRow';
 import AreaChart from 'components/Charts/AreaChart';
@@ -19,34 +19,34 @@ import {
 	curveDocumentation,
 	synthetixDataGithub,
 } from 'constants/links';
-import SUSDDistribution from '../Network/SUSDDistribution';
-import { SNXJSContext, SUSDContext, SNXContext, ProviderContext } from 'pages/_app';
+import OUSDDistribution from '../Network/OUSDDistribution';
+import { OKSJSContext, OUSDContext, OKSContext, ProviderContext } from 'pages/_app';
 import { formatIdToIsoString } from 'utils/formatter';
-import { getSUSDHoldersName } from 'utils/dataMapping';
+import { getOUSDHoldersName } from 'utils/dataMapping';
 import { LinkText, NewParagraph } from 'components/common';
 import {swapUSDT} from 'contracts';
 
-const CMC_API = 'https://coinmarketcap-api.synthetix.io/public/prices?symbols=SNX';
+const CMC_API = 'https://coinmarketcap-api.synthetix.io/public/prices?symbols=OKS';
 
 
 const NetworkSection: FC = () => {
 	const { t } = useTranslation();
 	const [etherLocked, setEtherLocked] = useState<number | null>(null);
-	const [sUSDFromEther, setsUSDFromEther] = useState<number | null>(null);
-	const [priorSNXPrice, setPriorSNXPrice] = useState<number | null>(null);
+	const [oUSDFromEther, setoUSDFromEther] = useState<number | null>(null);
+	const [priorOKSPrice, setPriorOKSPrice] = useState<number | null>(null);
 	const [priceChartPeriod, setPriceChartPeriod] = useState<ChartPeriod>('D');
-	const [SNXChartPriceData, setSNXChartPriceData] = useState<AreaChartData[]>([]);
-	const [SNXTotalSupply, setSNXTotalSupply] = useState<number | null>(null);
-	const [totalSupplySUSD, setTotalSupplySUSD] = useState<number | null>(null);
-	const [SNX24HVolume, setSNX24HVolume] = useState<number | null>(null);
+	const [OKSChartPriceData, setOKSChartPriceData] = useState<AreaChartData[]>([]);
+	const [OKSTotalSupply, setOKSTotalSupply] = useState<number | null>(null);
+	const [totalSupplyOUSD, setTotalSupplyOUSD] = useState<number | null>(null);
+	const [OKS24HVolume, setOKS24HVolume] = useState<number | null>(null);
 	const [activeCRatio, setActiveCRatio] = useState<number | null>(null);
 	const [networkCRatio, setNetworkCRatio] = useState<number | null>(null);
-	const [SNXPercentLocked, setSNXPercentLocked] = useState<number | null>(null);
-	const [SNXHolders, setSNXHolders] = useState<number | null>(null);
-	const [SUSDHolders, setSUSDHolders] = useState<TreeMapData[]>([]);
-	const snxjs = useContext(SNXJSContext);
-	const { sUSDPrice, setsUSDPrice } = useContext(SUSDContext);
-	const { SNXPrice, setSNXPrice, setSNXStaked } = useContext(SNXContext);
+	const [OKSPercentLocked, setOKSPercentLocked] = useState<number | null>(null);
+	const [OKSHolders, setOKSHolders] = useState<number | null>(null);
+	const [OUSDHolders, setOUSDHolders] = useState<TreeMapData[]>([]);
+	const oksjs = useContext(OKSJSContext);
+	const { oUSDPrice, setoUSDPrice } = useContext(OUSDContext);
+	const { OKSPrice, setOKSPrice, setOKSStaked } = useContext(OKSContext);
 	const provider = useContext(ProviderContext);
 
 
@@ -54,131 +54,133 @@ const NetworkSection: FC = () => {
 	useEffect(() => {
 
 		const fetchData = async () => {
-			const { formatEther, formatUnits, parseUnits } = snxjs.ethers.utils;
+			const { formatEther, formatUnits, parseUnits } = oksjs.ethers.utils;
 			 
 			const curveContract = null ;
 
 			const usdcContractNumber = 1;
 			const susdContractNumber = 3;
 			const susdAmount = 10000;
-			const susdAmountWei = Number(susdAmount.toString() / 1e18);
+			const susdAmountWei = 1; //Number(susdAmount.toString() / 1e18);
 			//TODO remove hardcoded address
-			//const pairContractUSDT = await snxjs.util.contractSettings.tronWeb.contract(swapUSDT.abi, swapUSDT.address);
+			//const pairContractUSDT = await oksjs.util.contractSettings.tronWeb.contract(swapUSDT.abi, swapUSDT.address);
 			//const { _reserve0, _reserve1} = await  pairContractUSDT.getReserves().call({_isConstant:true}) 
  
-			const sUSDPrice = await getSwapV2sUSDPrice();
+			const oUSDPrice = 1;//await getSwapV2oUSDPrice();
 
-			console.log(`sUSD price from Swap V2 is ${sUSDPrice}`)
+			console.log(`oUSD price from Swap V2 is ${oUSDPrice}`)
+			// @ts-ignore
 			const [
-				unformattedSnxPrice,
-				unformattedSnxTotalSupply,
+				unformattedOksPrice,
+				unformattedOksTotalSupply,
 				unformattedExchangeAmount,
-				cmcSNXData,
+				cmcOKSData,
 				unformattedLastDebtLedgerEntry,
 				unformattedTotalIssuedSynths,
 				unformattedIssuanceRatio,
 				holders,
-				snxTotals,
-				unformattedSUSDTotalSupply,
-				topSUSDHolders,
-				sUSDFromEth,
+				oksTotals,
+				unformattedOUSDTotalSupply,
+				topOUSDHolders,
+				oUSDFromEth,
 				ethSusdCollateralBalance,
 				ethCollateralBalance,
 			] = await Promise.all([
-				snxjs.ExchangeRates.rateForCurrency(snxjs.ethers.utils.formatBytes32String('OKS')),
-				snxjs.Synthetix.totalSupply(),
-				sUSDPrice,//curveContract.get_dy_underlying(susdContractNumber, usdcContractNumber, susdAmountWei),
+				oksjs.ExchangeRates.rateForCurrency(oksjs.ethers.utils.formatBytes32String('OKS')),
+				oksjs.Oikos.totalSupply(),
+				oUSDPrice,//curveContract.get_dy_underlying(susdContractNumber, usdcContractNumber, susdAmountWei),
 				axios.get(CMC_API),
-				snxjs.SynthetixState.lastDebtLedgerEntry(),
-				snxjs.Synthetix.totalIssuedSynths(snxjs.ethers.utils.formatBytes32String('sUSD')),
-				snxjs.SynthetixState.issuanceRatio(),
-				snxData.snx.holders({ max: 1000 }),
-				snxData.snx.total(),
-				snxjs.sUSD.totalSupply(),
-				snxData.synths.holders({ max: 5, synth: 'sUSD' }),
-				0,//.EtherCollateralsUSD.totalIssuedSynths(),
-				0,//provider.getBalance(snxjs.contracts.EtherCollateralsUSD.address),
-				0,//provider.getBalance(snxjs.contracts.EtherCollateral.address),
+				oksjs.OikosState.lastDebtLedgerEntry(),
+				oksjs.Oikos.totalIssuedSynths(oksjs.ethers.utils.formatBytes32String('oUSD')),
+				oksjs.OikosState.issuanceRatio(),
+				oksData.snx.holders({ max: 1000 }),
+				0,//oksData.oks.total(),
+				oksjs.oUSD.totalSupply(),
+				oksData.synths.holders({ max: 5, synth: 'oUSD' }),
+				0,//.EtherCollateraloUSD.totalIssuedSynths(),
+				0,//provider.getBalance(oksjs.contracts.EtherCollateraloUSD.address),
+				0,//provider.getBalance(oksjs.contracts.EtherCollateral.address),
 			]);
+			
 			 
 			setEtherLocked(
-				Number(snxjs.utils.formatEther(ethCollateralBalance)) +
-					Number(snxjs.utils.formatEther(ethSusdCollateralBalance))
+				Number(oksjs.utils.formatEther(ethCollateralBalance)) +
+					Number(oksjs.utils.formatEther(ethSusdCollateralBalance))
 			);
-			setSNXHolders(snxTotals.snxHolders);
-			const formattedSNXPrice = Number(formatEther(unformattedSnxPrice));
-			setSNXPrice(formattedSNXPrice);
-			const totalSupply = Number(formatEther(unformattedSnxTotalSupply));
-			setSNXTotalSupply(totalSupply);
+			setOKSHolders(oksTotals.oksHolders);
+			const formattedOKSPrice = Number(formatEther(unformattedOksPrice));
+			setOKSPrice(formattedOKSPrice);
+			const totalSupply = Number(formatEther(unformattedOksTotalSupply));
+			setOKSTotalSupply(totalSupply);
 			const exchangeAmount = Number(unformattedExchangeAmount);
-			setsUSDPrice(exchangeAmount );
-			setsUSDFromEther(Number(snxjs.utils.formatEther(sUSDFromEth)));
+			setoUSDPrice(exchangeAmount );
+			setoUSDFromEther(Number(oksjs.utils.formatEther(oUSDFromEth)));
 
-			const dailyVolume = 0;//cmcSNXData?.data?.data?.SNX?.quote?.USD?.volume_24h;
+			const dailyVolume = 0;//cmcOKSData?.data?.data?.OKS?.quote?.USD?.volume_24h;
 			if (dailyVolume) {
-				setSNX24HVolume(dailyVolume);
+				setOKS24HVolume(dailyVolume);
 			}
 
-			const lastDebtLedgerEntry = Number(snxjs.ethers.utils.formatUnits(unformattedLastDebtLedgerEntry, 27) );
+			const lastDebtLedgerEntry = Number(oksjs.ethers.utils.formatUnits(unformattedLastDebtLedgerEntry, 27) );
 
-			const [totalIssuedSynths, issuanceRatio, usdToSnxPrice, sUSDTotalSupply] = [
+			const [totalIssuedSynths, issuanceRatio, usdToOksPrice, oUSDTotalSupply] = [
 				unformattedTotalIssuedSynths,
 				unformattedIssuanceRatio,
-				unformattedSnxPrice,
-				unformattedSUSDTotalSupply,
+				unformattedOksPrice,
+				unformattedOUSDTotalSupply,
 			].map((val) => Number(formatEther(val)));
 
-			let snxTotal = 0;
-			let snxLocked = 0;
+			let oksTotal = 0;
+			let oksLocked = 0;
 			let stakersTotalDebt = 0;
 			let stakersTotalCollateral = 0;
 
 			for (const { collateral, debtEntryAtIndex, initialDebtOwnership } of holders) {
 
-				//console.log(`(${totalIssuedSynths} * ${lastDebtLedgerEntry} / ${debtEntryAtIndex}) * ${initialDebtOwnership}`)
+				console.log(`(${totalIssuedSynths} * ${lastDebtLedgerEntry} / ${debtEntryAtIndex}) * ${initialDebtOwnership}`)
 				let debtBalance =
 					((totalIssuedSynths * lastDebtLedgerEntry) / debtEntryAtIndex) * initialDebtOwnership;
 
-				let collateralRatio = debtBalance / collateral / usdToSnxPrice;
+				let collateralRatio = debtBalance / collateral / usdToOksPrice;
 
 				if (isNaN(debtBalance) || isNaN(collateralRatio) ) {
 					debtBalance = 0;
 					collateralRatio = 0;
 				}
 
-				const lockedSnx = collateral * Math.min(1, collateralRatio / issuanceRatio);
+				const lockedOks = collateral * Math.min(1, collateralRatio / issuanceRatio);
 
 				if (Number(debtBalance) > 0) {
 					stakersTotalDebt += Number(debtBalance);
-					stakersTotalCollateral += Number(collateral * usdToSnxPrice);
+					stakersTotalCollateral += Number(collateral * usdToOksPrice);
 				}
-				snxTotal += Number(collateral);
-				snxLocked += Number(lockedSnx);
+				oksTotal += Number(collateral);
+				oksLocked += Number(lockedOks);
 
-				//console.log(collateral, debtEntryAtIndex, initialDebtOwnership, totalIssuedSynths, usdToSnxPrice, debtBalance, collateralRatio, lockedSnx, snxTotal, snxLocked)
+				//console.log(collateral, debtEntryAtIndex, initialDebtOwnership, totalIssuedSynths, usdToOksPrice, debtBalance, collateralRatio, lockedOks, oksTotal, oksLocked)
 			}
 
 			//console.log(stakersTotalDebt , stakersTotalCollateral)
 
-			const topHolders = topSUSDHolders.map(
+			const topHolders = topOUSDHolders.map(
 				({ balanceOf, address }: { balanceOf: number; address: string }) => ({
-					name: getSUSDHoldersName(address),
+					name: getOUSDHoldersName(address),
 					value: balanceOf,
 				})
 			);
-			setSUSDHolders(topHolders);
-			const percentLocked = snxLocked / snxTotal;
-			setSNXPercentLocked(percentLocked);
-			setSNXStaked(totalSupply * percentLocked);
-			setTotalSupplySUSD(sUSDTotalSupply);
+			setOUSDHolders(topHolders);
+			const percentLocked = oksLocked / oksTotal;
+			setOKSPercentLocked(percentLocked);
+			setOKSStaked(totalSupply * percentLocked);
+			setTotalSupplyOUSD(oUSDTotalSupply);
 			setActiveCRatio(1 / (stakersTotalDebt / stakersTotalCollateral));
-			setNetworkCRatio((totalSupply * formattedSNXPrice) / totalIssuedSynths);
+			setNetworkCRatio((totalSupply * formattedOKSPrice) / totalIssuedSynths);
 		};
 		fetchData();
 	}, []);
 
-	const formatChartData = (data: SNXPriceData[], timeSeries: TimeSeries): AreaChartData[] =>
-		(data as SNXPriceData[]).map(({ id, averagePrice }) => {
+	const formatChartData = (data: OKSPriceData[], timeSeries: TimeSeries): AreaChartData[] =>
+		(data as OKSPriceData[]).map(({ id, averagePrice }) => {
 			 
 			return {
 				created: formatIdToIsoString(id, timeSeries as TimeSeries),
@@ -189,27 +191,27 @@ const NetworkSection: FC = () => {
 	
 		
 	const fetchNewChartData = async (fetchPeriod: ChartPeriod) => {
-		console.log({snxData})
-		let newSNXPriceData = [];
+		console.log({oksData})
+		let newOKSPriceData = [];
 		let timeSeries = '1d';
 
 		if (fetchPeriod === 'D') {
 			timeSeries = '15m';
-			newSNXPriceData = await snxData.rate.snxAggregate({ timeSeries, max: 24 * 4 });
+			newOKSPriceData = await oksData.rate.snxAggregate({ timeSeries, max: 24 * 4 });
 		} else if (fetchPeriod === 'W') {
 			timeSeries = '15m';
-			newSNXPriceData = await snxData.rate.snxAggregate({ timeSeries, max: 24 * 4 * 7 });
+			newOKSPriceData = await oksData.rate.snxAggregate({ timeSeries, max: 24 * 4 * 7 });
 		} else if (fetchPeriod === 'M') {
-			newSNXPriceData = await snxData.rate.snxAggregate({ timeSeries, max: 30 });
+			newOKSPriceData = await oksData.rate.snxAggregate({ timeSeries, max: 30 });
 		} else if (fetchPeriod === 'Y') {
-			newSNXPriceData = await snxData.rate.snxAggregate({ timeSeries, max: 365 });
+			newOKSPriceData = await oksData.rate.snxAggregate({ timeSeries, max: 365 });
 		}
 		
-		console.log({newSNXPriceData})
+		console.log(await oksData.rate.snxAggregate({ timeSeries, max: 24 * 4 }))
 		
-		newSNXPriceData = newSNXPriceData.reverse();
-		setPriorSNXPrice(newSNXPriceData[0].averagePrice);
-		setSNXChartPriceData(formatChartData(newSNXPriceData, timeSeries as TimeSeries));
+		newOKSPriceData = newOKSPriceData.reverse();
+		setPriorOKSPrice(newOKSPriceData[0].averagePrice);
+		setOKSChartPriceData(formatChartData(newOKSPriceData, timeSeries as TimeSeries));
 	};
 
 	useEffect(() => {
@@ -225,24 +227,24 @@ const NetworkSection: FC = () => {
 				periods={pricePeriods}
 				activePeriod={priceChartPeriod}
 				onPeriodSelect={(period: ChartPeriod) => {
-					setSNXChartPriceData([]); // will force loading state
+					setOKSChartPriceData([]); // will force loading state
 					setPriceChartPeriod(period);
 					fetchNewChartData(period);
 				}}
-				data={SNXChartPriceData}
-				title={t('homepage.snx-price.title')}
-				num={SNXPrice}
+				data={OKSChartPriceData}
+				title={t('homepage.oks-price.title')}
+				num={OKSPrice}
 				numFormat="currency2"
 				percentChange={
-					SNXPrice != null && priorSNXPrice != null ? (SNXPrice ?? 0) / priorSNXPrice - 1 : null
+					OKSPrice != null && priorOKSPrice != null ? (OKSPrice ?? 0) / priorOKSPrice - 1 : null
 				}
 				timeSeries={priceChartPeriod === 'D' ? '15m' : '1d'}
 				infoData={
 					<Trans
-						i18nKey="homepage.snx-price.infoData"
+						i18nKey="homepage.oks-price.infoData"
 						values={{
-							sjsLinkText: t('homepage.snx-price.sjsLinkText'),
-							viewPlaygroundLinkText: t('homepage.snx-price.viewPlaygroundLinkText'),
+							sjsLinkText: t('homepage.oks-price.sjsLinkText'),
+							viewPlaygroundLinkText: t('homepage.oks-price.viewPlaygroundLinkText'),
 						}}
 						components={{
 							sjslink: <LinkText href={synthetixJSGithub} />,
@@ -254,19 +256,19 @@ const NetworkSection: FC = () => {
 			/>
 			<StatsRow>
 				<StatsBox
-					key="SNXMKTCAP"
-					title={t('homepage.snx-market-cap.title')}
-					num={SNXPrice != null && SNXTotalSupply != null ? SNXTotalSupply * (SNXPrice ?? 0) : null}
+					key="OKSMKTCAP"
+					title={t('homepage.oks-market-cap.title')}
+					num={OKSPrice != null && OKSTotalSupply != null ? OKSTotalSupply * (OKSPrice ?? 0) : null}
 					percentChange={null}
-					subText={t('homepage.snx-market-cap.subtext')}
+					subText={t('homepage.oks-market-cap.subtext')}
 					color={COLORS.pink}
 					numberStyle="currency0"
 					numBoxes={3}
 					infoData={
 						<Trans
-							i18nKey="homepage.snx-market-cap.infoData"
+							i18nKey="homepage.oks-market-cap.infoData"
 							values={{
-								sjsLinkText: t('homepage.snx-market-cap.sjsLinkText'),
+								sjsLinkText: t('homepage.oks-market-cap.sjsLinkText'),
 							}}
 							components={{
 								linkText: <LinkText href={synthetixJSGithub} />,
@@ -275,9 +277,9 @@ const NetworkSection: FC = () => {
 					}
 				/>
 				<StatsBox
-					key="SUSDPRICE"
+					key="OUSDPRICE"
 					title={t('homepage.susd-price.title')}
-					num={sUSDPrice}
+					num={oUSDPrice}
 					percentChange={null}
 					subText={t('homepage.susd-price.subtext')}
 					color={COLORS.green}
@@ -296,11 +298,11 @@ const NetworkSection: FC = () => {
 					}
 				/>
 				<StatsBox
-					key="SNXVOLUME"
-					title={t('homepage.snx-volume.title')}
-					num={SNX24HVolume}
+					key="OKSVOLUME"
+					title={t('homepage.oks-volume.title')}
+					num={OKS24HVolume}
 					percentChange={null}
-					subText={t('homepage.snx-volume.subtext')}
+					subText={t('homepage.oks-volume.subtext')}
 					color={COLORS.green}
 					numberStyle="currency0"
 					numBoxes={3}
@@ -309,24 +311,24 @@ const NetworkSection: FC = () => {
 			</StatsRow>
 			<StatsRow>
 				<StatsBox
-					key="TOTALSNXLOCKED"
-					title={t('homepage.total-snx-locked.title')}
+					key="TOTALOKSLOCKED"
+					title={t('homepage.total-oks-locked.title')}
 					num={
-						SNXPercentLocked != null && SNXTotalSupply != null && SNXPrice != null
-							? SNXPercentLocked * SNXTotalSupply * (SNXPrice ?? 0)
+						OKSPercentLocked != null && OKSTotalSupply != null && OKSPrice != null
+							? OKSPercentLocked * OKSTotalSupply * (OKSPrice ?? 0)
 							: null
 					}
 					percentChange={null}
-					subText={t('homepage.total-snx-locked.subtext')}
+					subText={t('homepage.total-oks-locked.subtext')}
 					color={COLORS.pink}
 					numberStyle="currency0"
 					numBoxes={4}
 					infoData={
 						<Trans
-							i18nKey="homepage.total-snx-locked.infoData"
+							i18nKey="homepage.total-oks-locked.infoData"
 							values={{
-								sDataLinkText: t('homepage.total-snx-locked.sDataLinkText'),
-								sjsLinkText: t('homepage.total-snx-locked.sjsLinkText'),
+								sDataLinkText: t('homepage.total-oks-locked.sDataLinkText'),
+								sjsLinkText: t('homepage.total-oks-locked.sjsLinkText'),
 							}}
 							components={{
 								sDataLink: <LinkText href={synthetixDataGithub} />,
@@ -380,19 +382,19 @@ const NetworkSection: FC = () => {
 					}
 				/>
 				<StatsBox
-					key="SNXHOLDRS"
-					title={t('homepage.snx-holders.title')}
-					num={SNXHolders}
+					key="OKSHOLDRS"
+					title={t('homepage.oks-holders.title')}
+					num={OKSHolders}
 					percentChange={null}
-					subText={t('homepage.snx-holders.subtext')}
+					subText={t('homepage.oks-holders.subtext')}
 					color={COLORS.green}
 					numberStyle="number"
 					numBoxes={4}
 					infoData={
 						<Trans
-							i18nKey="homepage.snx-holders.infoData"
+							i18nKey="homepage.oks-holders.infoData"
 							values={{
-								subgraphLinkText: t('homepage.snx-holders.subgraphLinkText'),
+								subgraphLinkText: t('homepage.oks-holders.subgraphLinkText'),
 							}}
 							components={{
 								linkText: <LinkText href={synthetixSubgraph} />,
@@ -401,7 +403,7 @@ const NetworkSection: FC = () => {
 					}
 				/>
 			</StatsRow>
-			{/*<SUSDDistribution data={SUSDHolders} totalSupplySUSD={totalSupplySUSD} />*/}
+			{/*<OUSDDistribution data={OUSDHolders} totalSupplyOUSD={totalSupplyOUSD} />*/}
 
 		</>
 	);
