@@ -1,15 +1,15 @@
 export const githubSubgraph = 'https://github.com/oikos-cash/oikos-subgraph';
 
 export const synthetixSubgraph =
-	'https://thegraph.oikos.cash/subgraphs/name/oikos-team/oikos';
+	'https://api.thegraph.com/subgraphs/name/oikos-cash/oikos';
 
 export const synthetixRatesSubgraph =
-	'https://thegraph.oikos.cash/subgraphs/name/oikos-team/oikos-rates';
+	'https://api.thegraph.com/subgraphs/name/oikos-cash/rates';
 
 export const synthetixJSGithub = 'https://github.com/oikos-cash/oikos-js';
 
 export const synthetixExchangesSubgraph =
-	'https://thegraph.com/explorer/subgraph/synthetixio-team/synthetix-exchanges';
+	'https://api.thegraph.com/subgraphs/name/oikos-cash/exchanges';
 
 export const curveDocumentation = 'https://www.curve.fi/devdocs';
 
