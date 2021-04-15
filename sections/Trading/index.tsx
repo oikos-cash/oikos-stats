@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import snxData from '@oikos/oikos-data';
+import oksData from '@oikos/oikos-data-bsc';
 import { useTranslation, Trans } from 'react-i18next';
 
 import SectionHeader from 'components/SectionHeader';
@@ -40,8 +40,8 @@ const Trading: FC = () => {
 
 			const [exchangeVolumeData, exchanges, allTimeData] = await Promise.all([
 				getPostArchernarTotals(),
-				snxData.exchanges.since({ minTimestamp: oneDayAgo }),
-				snxData.exchanges.total(),
+				oksData.exchanges.since({ minTimestamp: oneDayAgo }),
+				oksData.exchanges.total(),
 			]);
 
 			console.log({exchanges})
@@ -81,10 +81,11 @@ const Trading: FC = () => {
 	const fetchNewChartData = async (fetchPeriod: ChartPeriod, type: 'trade' | 'volume' | 'both') => {
 		const timeSeries = '1d';
 		let tradesOverPeriodData = [];
+		console.log(await oksData.exchanges.aggregate({ timeSeries, max: 7 }))
 		if (fetchPeriod === 'W') {
-			tradesOverPeriodData = await snxData.exchanges.aggregate({ timeSeries, max: 7 });
+			tradesOverPeriodData = await oksData.exchanges.aggregate({ timeSeries, max: 7 });
 		} else if (fetchPeriod === 'M') {
-			tradesOverPeriodData = await snxData.exchanges.aggregate({ timeSeries, max: 30 });
+			tradesOverPeriodData = await oksData.exchanges.aggregate({ timeSeries, max: 30 });
 			const totalMonthlyTraders = tradesOverPeriodData.reduce(
 				(acc: number, { exchangers }: TradesRequestData) => {
 					acc += exchangers;
@@ -94,7 +95,7 @@ const Trading: FC = () => {
 			);
 			setAverageDailyTraders(Math.floor(totalMonthlyTraders / 30));
 		} else if (fetchPeriod === 'Y') {
-			tradesOverPeriodData = await snxData.exchanges.aggregate({ timeSeries, max: 365 });
+			tradesOverPeriodData = await oksData.exchanges.aggregate({ timeSeries, max: 365 });
 		}
 		tradesOverPeriodData = tradesOverPeriodData.reverse();
 

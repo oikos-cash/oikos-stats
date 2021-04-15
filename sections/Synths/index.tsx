@@ -19,7 +19,7 @@ import {
   } from "recharts"
 import SectionHeader from 'components/SectionHeader';
 import { MAX_PAGE_WIDTH, COLORS } from 'constants/styles';
-import { SNXJSContext, SUSDContext, ProviderContext } from 'pages/_app';
+import { OKSJSContext, OUSDContext, ProviderContext } from 'pages/_app';
 import { OpenInterest, SynthTotalSupply } from 'types/data';
 import SingleStatRow from 'components/SingleStatRow';
 import DoubleStatsBox from 'components/DoubleStatsBox';
@@ -37,8 +37,8 @@ const SynthsSection: FC<{}> = () => {
 	const { t } = useTranslation();
 	const [pieChartData, setPieChartData] = useState();
 	const [barChartData, setBarChartData] = useState<OpenInterest>({});
-	const snxjs = useContext(SNXJSContext);
-	const { sUSDPrice } = useContext(SUSDContext);
+	const oksjs = useContext(OKSJSContext);
+	const { sUSDPrice } = useContext(OUSDContext);
 	const provider = useContext(ProviderContext);
 	const [data, setData] = useState();
 	const [totalValue, setTotalValue] = useState(0); 
@@ -60,20 +60,20 @@ const SynthsSection: FC<{}> = () => {
 		const getDistributionDataTop10 = async (chart=false) => {
 			const toUtf8Bytes = strToBytes;
 			console.log(toUtf8Bytes)
-			const synths = snxjs.contractSettings.synths.map(({ name }) => name)
+			const synths = oksjs.contractSettings.synths.map(({ name }) => name)
 			let totalInUSD = 0
-			let snxPrice = await snxjs.ExchangeRates.rateForCurrency(
+			let oksPrice = await oksjs.ExchangeRates.rateForCurrency(
 			  toUtf8Bytes("OKS")
 			)
-			snxPrice = Number(snxPrice.toString())
-			snxPrice = snxPrice / 1e18
+			oksPrice = Number(oksPrice.toString())
+			oksPrice = oksPrice / 1e18
 			let results = await Promise.all(
 			  synths.map(async synth => {
-				const totalAmount = await snxjs[synth].totalSupply()
+				const totalAmount = await oksjs[synth].totalSupply()
 		  
 				const totalSupply = Number(totalAmount) / 1e18
 		  
-				let rateForSynth = await snxjs.ExchangeRates.rateForCurrency(
+				let rateForSynth = await oksjs.ExchangeRates.rateForCurrency(
 				  toUtf8Bytes(synth)
 				)
 				rateForSynth = rateForSynth.toString()
@@ -81,7 +81,7 @@ const SynthsSection: FC<{}> = () => {
 		  
 				const totalSupplyInUSD = rateForSynth * totalSupply
 				totalInUSD += totalSupplyInUSD
-				const rateIsFrozen = await snxjs.ExchangeRates.rateIsFrozen(
+				const rateIsFrozen = await oksjs.ExchangeRates.rateIsFrozen(
 				  toUtf8Bytes(synth)
 				)
 				//console.log(synth, rateIsFrozen)
