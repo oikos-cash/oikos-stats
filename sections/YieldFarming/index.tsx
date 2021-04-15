@@ -17,7 +17,7 @@ import {
 } from 'contracts/index.js';
 
 import { COLORS } from 'constants/styles';
-import { SNXJSContext, SNXContext, ProviderContext } from 'pages/_app';
+import { OKSJSContext, OKSContext, ProviderContext } from 'pages/_app';
 import { getAaveDepositRate, getCurveTokenPrice } from 'utils/customGraphQueries';
 import { formatPercentage } from 'utils/formatter';
 import { FullLineText } from '../../components/common';
@@ -52,8 +52,8 @@ const YieldFarming: FC = () => {
 	const [curveAPYFields, setCurveAPYFields] = useState<APYFields | null>(null);
 	const [curveSwapAPY, setCurveSwapAPY] = useState<number | null>(null);
 	const [curveTokenAPY, setCurveTokenAPY] = useState<number | null>(null);
-	const snxjs = useContext(SNXJSContext);
-	const { SNXPrice } = useContext(SNXContext);
+	const oksjs = useContext(OKSJSContext);
+	const { OKSPrice } = useContext(OKSContext);
 	const provider = useContext(ProviderContext);
 
 	useEffect(() => {
@@ -83,12 +83,12 @@ const YieldFarming: FC = () => {
 					firstColor={COLORS.pink}
 					secondMetricTitle={t('homepage.curve-susd.secondMetricTitle')}
 					secondMetric={
-						SNXPrice != null &&
+						OKSPrice != null &&
 						distributions != null &&
 						curveAPYFields != null &&
 						curveSwapAPY != null &&
 						curveTokenAPY != null
-							? ((distributions[curvepoolRewards.address] * (SNXPrice ?? 0)) /
+							? ((distributions[curvepoolRewards.address] * (OKSPrice ?? 0)) /
 									(curveAPYFields.balanceOf * curveAPYFields.price)) *
 									52 +
 							  curveSwapAPY +
@@ -102,10 +102,10 @@ const YieldFarming: FC = () => {
 							i18nKey={'homepage.curve-susd.infoData'}
 							values={{
 								rewards: curveTokenAPY != null ? formatPercentage(curveTokenAPY) : '...',
-								snxRewards:
-									distributions != null && curveAPYFields != null && SNXPrice != null
+								oksRewards:
+									distributions != null && curveAPYFields != null && OKSPrice != null
 										? formatPercentage(
-												((distributions[curvepoolRewards.address] * (SNXPrice ?? 0)) /
+												((distributions[curvepoolRewards.address] * (OKSPrice ?? 0)) /
 													(curveAPYFields.balanceOf * curveAPYFields.price)) *
 													52
 										  )
@@ -128,8 +128,8 @@ const YieldFarming: FC = () => {
 					firstColor={COLORS.green}
 					secondMetricTitle={t('homepage.iETH.secondMetricTitle')}
 					secondMetric={
-						distributions != null && iEthAPYFields != null && SNXPrice != null
-							? ((distributions[iEth4Rewards.address] * (SNXPrice ?? 0)) /
+						distributions != null && iEthAPYFields != null && OKSPrice != null
+							? ((distributions[iEth4Rewards.address] * (OKSPrice ?? 0)) /
 									(iEthAPYFields.balanceOf * iEthAPYFields.price)) *
 							  52
 							: null

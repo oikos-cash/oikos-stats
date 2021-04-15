@@ -31,7 +31,8 @@
 		},
 		"susd-price": {
 			"title": "oUSD PRICE",
-			"subtext": "Price of oUSD on Oikos Swap V2",
+			"subtext": "Price of oUSD on Derive.fi",
+			"link": "Derive.fi",
 			"infoData": "The price of oUSD is calculated using the peg from Oikos Swap V2, which holds the majority of oUSD in a USDT based liquidity pool. The peg is calculated using the ratio between the reserves of each token in the pool.",
 			"curveDocLinkText": "Curve documentation"
 		},

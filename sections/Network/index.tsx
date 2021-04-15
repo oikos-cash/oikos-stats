@@ -66,9 +66,9 @@ const NetworkSection: FC = () => {
 			//const pairContractUSDT = await oksjs.util.contractSettings.tronWeb.contract(swapUSDT.abi, swapUSDT.address);
 			//const { _reserve0, _reserve1} = await  pairContractUSDT.getReserves().call({_isConstant:true}) 
  
-			const oUSDPrice = 1;//await getSwapV2oUSDPrice();
+			const oUSDPrice = 1.0015;//await getSwapV2oUSDPrice();
 
-			console.log(`oUSD price from Swap V2 is ${oUSDPrice}`)
+			console.log(`oUSD price from Derive.fi is ${oUSDPrice}`)
 			// @ts-ignore
 			const [
 				unformattedOksPrice,

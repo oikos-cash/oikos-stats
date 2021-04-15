@@ -4,7 +4,7 @@ const aaveSubgraphURL = 'https://api.thegraph.com/subgraphs/name/aave/protocol-m
 const uniswapV2SubgraphURL = 'https://thegraph.oikos.cash/subgraphs/name/oikos/swap-V2';
 const CRVTokenAddress = '0xd533a949740bb3306d119cc777fa900ba034cd52';
 const synthetixExchangesGraphURL =
-	'https://thegraph.oikos.cash/subgraphs/name/oikos-team/oikos-exchanges';
+	'https://api.thegraph.com/subgraphs/name/oikos-cash/exchanges';
 
 export async function getAaveDepositRate(): Promise<number> {
 	return pageResults({
@@ -47,7 +47,7 @@ export async function getCurveTokenPrice(): Promise<number> {
 	});
 }
 
-export async function getSwapV2sUSDPrice(): Promise<number> {
+export async function getSwapV2oUSDPrice(): Promise<number> {
 	return pageResults({
 		api: uniswapV2SubgraphURL,
 		query: {
