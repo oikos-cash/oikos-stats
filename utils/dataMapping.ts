@@ -7,7 +7,7 @@ const KNOWN_ADDRESSES: { [address: string]: string } = {
 	'0xf1f85b2c54a2bd284b1cf4141d64fd171bd85539': 'Sushiswap',
 };
 
-export const getSUSDHoldersName = (id: string): string => {
+export const getOUSDHoldersName = (id: string): string => {
 	const address = id.split('-')[0];
 	return KNOWN_ADDRESSES[address] ?? 'unknown';
 };
