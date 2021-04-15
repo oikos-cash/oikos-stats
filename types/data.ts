@@ -13,7 +13,7 @@ export type SynthTotalSupply = {
 	value: number;
 };
 
-export type SNXPriceData = {
+export type OKSPriceData = {
 	id: string;
 	averagePrice: number;
 };
