@@ -17,29 +17,29 @@
 			"trading": "TRADING",
 			"yieldFarming": "YIELD FARMING"
 		},
-		"snx-price": {
+		"oks-price": {
 			"title": "OKS PRICE",
 			"infoData": "The price of OKS is obtained from Chainlink oracles, which are retrieved using the <sjslink>{{sjsLinkText}}</sjslink>. <newParagraph>For the chart, the data is collected from the \"DailyOKSPrice\" and \"FifteenMinuteOKSPrice\" entities in the Oikos rates subgraph <viewPlaygroundLink>{{viewPlaygroundLinkText}}</viewPlaygroundLink>.</newParagraph>",
 			"sjsLinkText": "oikos-js repo",
 			"viewPlaygroundLinkText": "(view playground)"
 		},
-		"snx-market-cap": {
+		"oks-market-cap": {
 			"title": "OKS MARKET CAP",
 			"subtext": "Fully diluted market cap for OKS",
 			"infoData": "The market cap is calculated using the price of OKS from Chainlink oracles multiplied against the total supply of OKS tokens (fully diluted including escrow). These data points are retrieved using the <linkText>{{sjsLinkText}}</linkText>.",
 			"sjsLinkText": "oikos-js repo"
 		},
 		"susd-price": {
-			"title": "sUSD PRICE",
-			"subtext": "Price of sUSD on Oikos Swap V2",
-			"infoData": "The price of sUSD is calculated using the peg from Oikos Swap V2, which holds the majority of sUSD in a USDT based liquidity pool. The peg is calculated using the ratio between the reserves of each token in the pool.",
+			"title": "oUSD PRICE",
+			"subtext": "Price of oUSD on Oikos Swap V2",
+			"infoData": "The price of oUSD is calculated using the peg from Oikos Swap V2, which holds the majority of oUSD in a USDT based liquidity pool. The peg is calculated using the ratio between the reserves of each token in the pool.",
 			"curveDocLinkText": "Curve documentation"
 		},
-		"snx-volume": {
+		"oks-volume": {
 			"title": "OKS VOLUME",
 			"subtext": "OKS 24 hr volume from Coinmarketcap"
 		},
-		"total-snx-locked": {
+		"total-oks-locked": {
 			"title": "TOTAL OKS STAKED",
 			"subtext": "The total value of all staked OKS",
 			"infoData": "To calculate the value of OKS tokens staked we sample the top 1,000 OKS stakers using the <sDataLink>{{sDataLinkText}}</sDataLink> and then determine what proportion of OKS they have staked.<newParagraph>We then multiply this proportion across the total supply of OKS tokens which we get from the <sjsLink>{{sjsLinkText}}</sjsLink>.</newParagraph><newParagraph>Taking a small sample produces a result that is very close to taking the entire set of holders and allows the page to load faster.</newParagraph>",
@@ -58,23 +58,23 @@
 			"infoData": "To calculate the C-Ratio of active stakers we sample the top 1,000 OKS stakers using the <sjsLink>{{sDataLinkText}}</sjsLink> and then determine the cumulative C-Ratio using their collateral-to-debt ratio.<newParagraph>Taking a small sample produces a result that is very close to taking the entire set of holders and allows the page to load faster.</newParagraph>",
 			"sDataLinkText": "Oikos data repo"
 		},
-		"snx-holders": {
+		"oks-holders": {
 			"title": "OKS HOLDERS",
 			"subtext": "Total number of OKS holders",
 			"infoData": "The number of OKS holders is obtained from the <linkText>{{subgraphLinkText}}</linkText>.",
 			"subgraphLinkText": "Oikos subgraph"
 		},
 		"susd-distribution": {
-			"title": "sUSD DISTRIBUTION",
-			"subtext": "Distribution of sUSD deposited/stored"
+			"title": "oUSD DISTRIBUTION",
+			"subtext": "Distribution of oUSD deposited/stored"
 		},
 		"eth-collateral": {
 			"title": "ETH COLLATERAL",
 			"subtext": "Total number of Ether locked as collateral"
 		},
 		"susd-minted-from-eth": {
-			"title": "sUSD MINTED FROM ETH",
-			"subtext": "Total number of sUSD minted using Ether as collateral"
+			"title": "oUSD MINTED FROM ETH",
+			"subtext": "Total number of oUSD minted using Ether as collateral"
 		},
 		"largest-active-binary-market": {
 			"title": "LARGEST ACTIVE BINARY MARKET (USD)",
@@ -108,22 +108,22 @@
 		"current-staking-apy": {
 			"title": "CURRENT OKS STAKING APY",
 			"subtext": "Current annual percentage yield from staking OKS",
-			"infoData": "To calculate the total APY for staking OKS, we combine the OKS rewards APY and sUSD rewards APY given in the previous fee period."
+			"infoData": "To calculate the total APY for staking OKS, we combine the OKS rewards APY and oUSD rewards APY given in the previous fee period."
 		},
 		"current-staking-apy-susd": {
-			"title": "CURRENT OKS STAKING APY (sUSD REWARDS)",
-			"subtext": "Current annual sUSD yield for OKS stakers from Synth trading fees"
+			"title": "CURRENT OKS STAKING APY (oUSD REWARDS)",
+			"subtext": "Current annual oUSD yield for OKS stakers from Synth trading fees"
 		},
-		"current-staking-apy-snx": {
+		"current-staking-apy-oks": {
 			"title": "CURRENT OKS STAKING APY (OKS REWARDS)",
 			"subtext": "Current annual OKS yield for OKS stakers. This OKS comes from the inflationary OKS supply"
 		},
 		"current-fee-pool": {
-			"title": "CURRENT FEE POOL (sUSD)",
+			"title": "CURRENT FEE POOL (oUSD)",
 			"subtext": "The total value of all Synth trading fees both claimed and claimable in the weekly period which started on {{startDate}}",
-			"infoData": "OKS and sUSD rewards are paid weekly to stakers who maintain their collateral ratio of OKS/debt. <newParagraph>Each week, stakers can claim Synth trading fees generated from the prior week.</newParagraph>"
+			"infoData": "OKS and oUSD rewards are paid weekly to stakers who maintain their collateral ratio of OKS/debt. <newParagraph>Each week, stakers can claim Synth trading fees generated from the prior week.</newParagraph>"
 		},
-		"current-fee-pool-snx": {
+		"current-fee-pool-oks": {
 			"title": "CURRENT REWARDS POOL (OKS)",
 			"subtext": "The total value of all OKS staking rewards both claimed and claimable in the weekly period which started on {{startDate}}"
 		},
@@ -192,7 +192,7 @@
 			"infoData": "The number of trades is the sum of all daily periods in each chart below. The weekly chart (default) has 7 unique periods, monthly has 30 and annual has 365. <newParagraph>The number of trades is captured daily in the synthetix exchanges subgraph using the \"DailyTotal\" entity <linkText href={synthetixExchangesSubgraph}>(view playground).</linkText></newParagraph><fullLineLink>See GitHub repo for this subgraph</fullLineLink>"
 		},
 		"yield-farming-subtitle-text": {
-			"sUSD": "Rewards for providing liquidity to the {{name}} stablecoin liquidity pool on Curve",
+			"oUSD": "Rewards for providing liquidity to the {{name}} stablecoin liquidity pool on Curve",
 			"default": "Rewards for holding {{name}} and staking it in the rewards contract"
 		},
 		"lending-apy": {
@@ -200,10 +200,10 @@
 			"subtext": "The current APY for lending OKS on AAVE"
 		},
 		"curve-susd": {
-			"title": "Curvepool sUSD",
+			"title": "Curvepool oUSD",
 			"firstMetricTitle": "WEEKLY REWARDS (OKS)",
 			"secondMetricTitle": "Total Annual Percentage Yield",
-			"infoData": "The APY for the sUSD Curve Pool consists of 3 different rewards:<fullLineText>1. Swap fees at {{swapFees}}</fullLineText><fullLineText>2. OKS rewards at {{snxRewards}}</fullLineText><fullLineText>3. CRV rewards {{rewards}}</fullLineText>"
+			"infoData": "The APY for the oUSD Curve Pool consists of 3 different rewards:<fullLineText>1. Swap fees at {{swapFees}}</fullLineText><fullLineText>2. OKS rewards at {{oksRewards}}</fullLineText><fullLineText>3. CRV rewards {{rewards}}</fullLineText>"
 		},
 		"iETH": {
 			"title": "iETH",
