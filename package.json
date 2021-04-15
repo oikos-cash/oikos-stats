@@ -33,7 +33,7 @@
 		"react-table": "7.5.0",
 		"recharts": "1.8.5",
 		"styled-components": "5.1.1",
-		"@oikos/oikos-data-bsc": "0.1.5",
+		"@oikos/oikos-data-bsc": "0.1.6",
 		"@oikos/oikos-js-bsc": "0.2.17",
 		"unstated-next": "1.1.0",
 		"use-immer": "0.4.1"
