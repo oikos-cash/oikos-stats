@@ -1,1 +1,1 @@
-declare module '@oikos/oikos-data';
+declare module '@oikos/oikos-data-bsc';
