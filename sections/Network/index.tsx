@@ -1,7 +1,9 @@
 import { FC, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import oksData from '@oikos/oikos-data-bsc';
-import { ethers } from 'ethers';
+import { OikosJs } from '@oikos/oikos-js-bsc';
+
+import { ethers, getDefaultProvider} from 'ethers';
 import { Trans, useTranslation } from 'react-i18next';
 import { BigNumber } from "bignumber.js";
 //import { getSwapV2oUSDPrice } from 'utils/customGraphQueries';
@@ -24,10 +26,12 @@ import { OKSJSContext, OUSDContext, OKSContext, ProviderContext } from 'pages/_a
 import { formatIdToIsoString } from 'utils/formatter';
 import { getOUSDHoldersName } from 'utils/dataMapping';
 import { LinkText, NewParagraph } from 'components/common';
-import {swapUSDT} from 'contracts';
+import { swapUSDT, uniswapV2 }  from 'contracts';
 
 const CMC_API = 'https://coinmarketcap-api.synthetix.io/public/prices?symbols=OKS';
+let snxJS = new OikosJs({networkId:56}); 
 
+export const bytesFormatter = input =>snxJS.ethers.utils.formatBytes32String(input);
 
 const NetworkSection: FC = () => {
 	const { t } = useTranslation();
@@ -48,10 +52,36 @@ const NetworkSection: FC = () => {
 	const { oUSDPrice, setoUSDPrice } = useContext(OUSDContext);
 	const { OKSPrice, setOKSPrice, setOKSStaked } = useContext(OKSContext);
 	const provider = useContext(ProviderContext);
-
-
+	
 	// NOTE: use interval? or save data calls?
 	useEffect(() => {
+
+		const getOusdInUsd = async () => {
+			//	const oBnb = convertFromSynth(synthRates.ousd, synthRates.obnb);
+			//	const bnb = oBnb * obnbToBnbRate;
+			//	return bnb * synthRates.obnb;
+
+			/* @ts-ignore */
+			const provider = getDefaultProvider('https://bsc-dataseed.binance.org');
+			const uniswapV2Contract = new ethers.Contract(uniswapV2.address, uniswapV2.abi, provider);
+
+			let oBNBPrice = await snxJS.ExchangeRates.ratesForCurrencies(
+				['oBNB'].map(bytesFormatter)
+			);
+
+			oBNBPrice = oBNBPrice / 1e18
+			console.log(`oBNB price is ${oBNBPrice}`)
+
+			const [ reserves ] = await Promise.all([
+				uniswapV2Contract.getReserves(),
+			]) 
+			let bnb = reserves[1] / 1e18
+			let bnbReserveUSDValue = bnb * oBNBPrice
+			let price = bnbReserveUSDValue / (reserves[0] / 1e18)
+			console.log(`x is ${bnbReserveUSDValue} y ${reserves[0] / 1e18}`)
+		
+			return price
+		};
 
 		const fetchData = async () => {
 			const { formatEther, formatUnits, parseUnits } = oksjs.ethers.utils;
@@ -66,9 +96,10 @@ const NetworkSection: FC = () => {
 			//const pairContractUSDT = await oksjs.util.contractSettings.tronWeb.contract(swapUSDT.abi, swapUSDT.address);
 			//const { _reserve0, _reserve1} = await  pairContractUSDT.getReserves().call({_isConstant:true}) 
  
-			const oUSDPrice = 1.0015;//await getSwapV2oUSDPrice();
+			const oUSDPrice = await getOusdInUsd()
+			//console.log(await getOusdInUsd())
 
-			console.log(`oUSD price from Derive.fi is ${oUSDPrice}`)
+			console.log(`oUSD price from Pancake Swap is ${oUSDPrice}`)
 			// @ts-ignore
 			const [
 				unformattedOksPrice,
