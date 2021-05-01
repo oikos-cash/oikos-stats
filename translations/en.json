@@ -31,7 +31,7 @@
 		},
 		"susd-price": {
 			"title": "oUSD PRICE",
-			"subtext": "Price of oUSD on Derive.fi",
+			"subtext": "Price of oUSD on Pancake swap",
 			"link": "Derive.fi",
 			"infoData": "The price of oUSD is calculated using the peg from Pancake Swap V2, which holds the majority of oUSD in a BNB based liquidity pool. The peg is calculated using the ratio between the reserves of each token in the pool.",
 			"curveDocLinkText": "Curve documentation"
