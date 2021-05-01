@@ -80,7 +80,7 @@ const NetworkSection: FC = () => {
 			let price = bnbReserveUSDValue / (reserves[0] / 1e18)
 			console.log(`x is ${bnbReserveUSDValue} y ${reserves[0] / 1e18}`)
 		
-			return price
+			return price.toFixed(3)
 		};
 
 		const fetchData = async () => {
