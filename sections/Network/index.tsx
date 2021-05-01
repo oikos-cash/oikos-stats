@@ -78,8 +78,7 @@ const NetworkSection: FC = () => {
 			let bnb = reserves[1] / 1e18
 			let bnbReserveUSDValue = bnb * oBNBPrice
 			let price = bnbReserveUSDValue / (reserves[0] / 1e18)
-			console.log(`x is ${bnbReserveUSDValue} y ${reserves[0] / 1e18}`)
-		
+			 
 			return price.toFixed(3)
 		};
 
@@ -144,7 +143,7 @@ const NetworkSection: FC = () => {
 			const totalSupply = Number(formatEther(unformattedOksTotalSupply));
 			setOKSTotalSupply(totalSupply);
 			const exchangeAmount = Number(unformattedExchangeAmount);
-			setoUSDPrice(exchangeAmount );
+			setoUSDPrice(oUSDPrice );
 			setoUSDFromEther(Number(oksjs.utils.formatEther(oUSDFromEth)));
 
 			const dailyVolume = 0;//cmcOKSData?.data?.data?.OKS?.quote?.USD?.volume_24h;
@@ -314,7 +313,7 @@ const NetworkSection: FC = () => {
 					percentChange={null}
 					subText={t('homepage.susd-price.subtext')}
 					color={COLORS.green}
-					numberStyle="currency2"
+					numberStyle="currency1"
 					numBoxes={3}
 					infoData={
 						<Trans
