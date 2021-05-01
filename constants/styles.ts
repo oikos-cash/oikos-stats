@@ -5,7 +5,8 @@ export type NumberStyle =
 	| 'number'
 	| 'number4'
 	| 'currency0'
-	| 'currency2';
+	| 'currency2'
+	| 'currency1';
 
 export const MAX_PAGE_WIDTH = 1226;
 
