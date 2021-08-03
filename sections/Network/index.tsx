@@ -21,7 +21,7 @@ import {
 	curveDocumentation,
 	synthetixDataGithub,
 } from 'constants/links';
-import OUSDDistribution from '../Network/OUSDDistribution';
+//import OUSDDistribution from '../Network/OUSDDistribution';
 import { OKSJSContext, OUSDContext, OKSContext, ProviderContext } from 'pages/_app';
 import { formatIdToIsoString } from 'utils/formatter';
 import { getOUSDHoldersName } from 'utils/dataMapping';
@@ -119,7 +119,7 @@ const NetworkSection: FC = () => {
 				oksjs.ExchangeRates.rateForCurrency(oksjs.ethers.utils.formatBytes32String('OKS')),
 				oksjs.Oikos.totalSupply(),
 				oUSDPrice,//curveContract.get_dy_underlying(susdContractNumber, usdcContractNumber, susdAmountWei),
-				axios.get(CMC_API),
+				0,//axios.get(CMC_API),
 				oksjs.OikosState.lastDebtLedgerEntry(),
 				oksjs.Oikos.totalIssuedSynths(oksjs.ethers.utils.formatBytes32String('oUSD')),
 				oksjs.OikosState.issuanceRatio(),
@@ -313,7 +313,7 @@ const NetworkSection: FC = () => {
 					percentChange={null}
 					subText={t('homepage.susd-price.subtext')}
 					color={COLORS.green}
-					numberStyle="currency1"
+					numberStyle="currency0"
 					numBoxes={3}
 					infoData={
 						<Trans
