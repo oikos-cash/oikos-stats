@@ -210,6 +210,22 @@
 			"title": "iETH",
 			"firstMetricTitle": "WEEKLY REWARDS (OKS)",
 			"secondMetricTitle": "Annual Percentage Yield"
-		}
+		},
+		"liquidations": {
+			"title": "LIQUIDATIONS",
+			"subtitle": "Active liquidations flagged within the past 30 days",
+			"no-results": "No liquidations found",
+			"columns": {
+				"account": "WALLET ADDRESS",
+				"deadline": "TIME TIL LIQUIDATION",
+				"c-ratio": "CURRENT C-RATIO",
+				"liquidatable-amount": "LIQUIDATABLE AMOUNT",
+				"amount-to-cover": "AMOUNT TO COVER DEBT"
+			},
+			"pagination": {
+				"page": "Page",
+				"page-of-total-pages": "{{page}} of {{totalPages}}"
+			}
+		}		
 	}
 }
