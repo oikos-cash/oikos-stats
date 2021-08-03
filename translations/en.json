@@ -217,9 +217,9 @@
 			"no-results": "No liquidations found",
 			"columns": {
 				"account": "WALLET ADDRESS",
-				"deadline": "TIME TIL LIQUIDATION",
+				"deadline": "TIME TO LIQUIDATION",
 				"c-ratio": "CURRENT C-RATIO",
-				"liquidatable-amount": "LIQUIDATABLE AMOUNT",
+				"liquidatable-amount": "LIQUIDABLE AMOUNT",
 				"amount-to-cover": "AMOUNT TO COVER DEBT"
 			},
 			"pagination": {
