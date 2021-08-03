@@ -8,6 +8,8 @@ import SectionHeader from 'components/SectionHeader';
 import StatsRow from 'components/StatsRow';
 import StatsBox from 'components/StatsBox';
 import AreaChart from 'components/Charts/AreaChart';
+import { useLiquidationsQuery, LiquidationsData } from 'queries/staking';
+import Liquidations from './Liquidations';
 
 import { COLORS } from 'constants/styles';
 import { OKSJSContext, OKSContext, OUSDContext } from 'pages/_app';
@@ -24,9 +26,12 @@ const Staking: FC = () => {
 	const [totalActiveStakers, setTotalActiveStakers] = useState<number | null>(null);
 	const [stakersChartData, setStakersChartData] = useState<AreaChartData[]>([]);
 	const oksjs = useContext(OKSJSContext);
-	const { OKSPrice, OKSStaked } = useContext(OKSContext);
+	const { OKSPrice, OKSStaked, issuanceRatio} = useContext(OKSContext);
 	const { oUSDPrice } = useContext(OUSDContext);
-
+	const { data: lidquidationsData, isLoading: isLiquidationsLoading } = useLiquidationsQuery();
+	const formattedLiquidationsData = (lidquidationsData ?? []).sort(
+		(a: LiquidationsData, b: LiquidationsData) => a.deadline - b.deadline
+	);
 	useEffect(() => {
 		const fetchFeePeriod = async (period: number): Promise<FeePeriod> => {
 			console.log({oksjs})
@@ -254,6 +259,12 @@ const Staking: FC = () => {
 						}}
 					/>
 				}
+			/>
+			<Liquidations
+				liquidationsData={formattedLiquidationsData}
+				isLoading={isLiquidationsLoading}
+				issuanceRatio={issuanceRatio}
+				snxPrice={OKSPrice}
 			/>
 		</>
 	);
