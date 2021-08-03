@@ -76,7 +76,13 @@ export const formatIdToIsoString = (id: string, timeSeries: TimeSeries) => {
 
 export type TimeSeriesType = '15m' | '1d';
 
-export const formatTime = (created: string, type: TimeSeriesType) =>
-	type === '15m' ? format(new Date(created), 'HH:00') : format(new Date(created), 'MM/dd');
+export const formatTime = (created: string | number, type: TimeSeriesType) => {
+	if (type === '15m') {
+		return format(new Date(created), 'HH:00');
+	} else if (type === '1d') {
+		return format(new Date(created), 'MM/dd');
+	}
+	throw new Error('unrecognized time to format');
+}
 
 export const formatDate = (created: string) => format(new Date(created), 'PPpp');

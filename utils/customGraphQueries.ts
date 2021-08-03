@@ -1,7 +1,7 @@
 import { pageResults } from '@oikos/oikos-data-bsc';
 
 const aaveSubgraphURL = 'https://api.thegraph.com/subgraphs/name/aave/protocol-multy-raw';
-const uniswapV2SubgraphURL = 'https://thegraph.oikos.cash/subgraphs/name/oikos/swap-V2';
+const uniswapV2SubgraphURL = 'https://api.thegraph.com/subgraphs/name/thomasd3/pancake-swap';
 const CRVTokenAddress = '0xd533a949740bb3306d119cc777fa900ba034cd52';
 const synthetixExchangesGraphURL =
 	'https://api.thegraph.com/subgraphs/name/oikos-cash/exchanges';
@@ -56,7 +56,7 @@ export async function getSwapV2oUSDPrice(): Promise<number> {
 				orderBy: 'id',
 				orderDirection: 'desc',
 				where: {
-					id: `\\"0x170ddac94981c839aa67eb019bda4ae63b450809\\"`,
+					id: `\\"0xcb947258d38f45fffb53e7930f38cb8b6dc69d4f\\"`,
 				},
 			},
 			properties: ['token0Price'],
