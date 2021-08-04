@@ -26,10 +26,11 @@ const Liquidations: FC<LiquidationsProps> = ({
 	liquidationsData,
 	isLoading,
 	issuanceRatio,
-	snxPrice,
+	OKSPrice,
 }) => {
 	const { t } = useTranslation();
-	const columnsDeps = useMemo(() => [issuanceRatio, snxPrice], [issuanceRatio, snxPrice]);
+	const columnsDeps = useMemo(() => [issuanceRatio, OKSPrice], [issuanceRatio, OKSPrice]);
+	console.log(`Got issuanceRatio ${issuanceRatio} OKS price ${OKSPrice}`)
 	return (
 		<SectionWrap>
 			<SectionTitle>{t('homepage.liquidations.title')}</SectionTitle>
@@ -90,19 +91,17 @@ const Liquidations: FC<LiquidationsProps> = ({
 						sortType: 'basic',
 						Cell: (cellProps: CellProps<LiquidationsData>) => {
 							if (
-								snxPrice != null &&
+								OKSPrice != null &&
 								issuanceRatio != null &&
 								cellProps.row.original.currentCollateral
 							) {
-								const stakerTargetDebt =
-									(issuanceRatio / snxPrice) * cellProps.row.original.currentCollateral;
-								const stakerCurrentDebt =
-									(cellProps.row.original.currentRatio / snxPrice) *
-									cellProps.row.original.currentCollateral;
+								console.log(`(${issuanceRatio} / ${OKSPrice}) * ${cellProps.row.original.currentCollateral}`)
+								
+								const target = cellProps.row.original.debtBalance - (issuanceRatio * cellProps.row.original.currentCollateral * OKSPrice)
+								
 								return (
-									<InterSpan>{`${formatNumber(stakerCurrentDebt - stakerTargetDebt)} ${
-										CryptoCurrency.oUSD
-									}`}</InterSpan>
+									<InterSpan>
+										{`${(target).toFixed(3)} ${CryptoCurrency.oUSD}`}</InterSpan>
 								);
 							}
 							return <InterSpan>{NO_VALUE}</InterSpan>;

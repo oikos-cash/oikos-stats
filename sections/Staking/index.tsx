@@ -26,7 +26,10 @@ const Staking: FC = () => {
 	const [totalActiveStakers, setTotalActiveStakers] = useState<number | null>(null);
 	const [stakersChartData, setStakersChartData] = useState<AreaChartData[]>([]);
 	const oksjs = useContext(OKSJSContext);
-	const { OKSPrice, OKSStaked, issuanceRatio} = useContext(OKSContext);
+	const { OKSPrice, OKSStaked} = useContext(OKSContext);
+	const [ issuanceRatio, setIssuanceRatio] = useState(0);
+	const [ debt, setDebt] = useState(0);
+
 	const { oUSDPrice } = useContext(OUSDContext);
 	const { data: lidquidationsData, isLoading: isLiquidationsLoading } = useLiquidationsQuery();
 	const formattedLiquidationsData = (lidquidationsData ?? []).sort(
@@ -83,11 +86,16 @@ const Staking: FC = () => {
 		setStakersChartData(formatChartData(newStakersData));
 	};
 
+	const fetchIssuanceRatio = async() => {
+		const issuanceRatio = await oksjs.OikosState.issuanceRatio();
+		setIssuanceRatio(issuanceRatio/1e18)
+	}
 	useEffect(() => {
+		fetchIssuanceRatio();
 		fetchNewChartData(stakersChartPeriod);
 	}, [stakersChartPeriod]);
 
-	console.log(OKSStaked)
+	console.log(issuanceRatio)
 	const stakingPeriods: ChartPeriod[] = ['W', 'M', 'Y'];
 	const OKSValueStaked = useMemo(() => (OKSPrice ?? 0) * (OKSStaked ?? 0), [OKSPrice, OKSStaked]);
 	console.log({totalActiveStakers})
@@ -263,8 +271,12 @@ const Staking: FC = () => {
 			<Liquidations
 				liquidationsData={formattedLiquidationsData}
 				isLoading={isLiquidationsLoading}
-				issuanceRatio={issuanceRatio}
-				snxPrice={OKSPrice}
+				issuanceRatio={issuanceRatio != null 
+					? issuanceRatio
+					: null}
+				OKSPrice={OKSPrice != null 
+						? OKSPrice
+						: null}
 			/>
 		</>
 	);
