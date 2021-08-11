@@ -13,8 +13,8 @@
 	"dependencies": {
 		"@material-ui/core": "4.11.0",
 		"@material-ui/lab": "4.0.0-alpha.56",
-		"@oikos/oikos-data-bsc": "0.1.12",
-		"@oikos/oikos-js-bsc": "0.2.49",
+		"@oikos/oikos-data-bsc": "0.1.13",
+		"@oikos/oikos-js-bsc": "0.2.51",
 		"axios": "0.20.0",
 		"bignumber.js": "9.0.0",
 		"bnc-notify": "1.3.1",
