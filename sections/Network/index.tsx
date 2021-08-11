@@ -313,7 +313,7 @@ const NetworkSection: FC = () => {
 					percentChange={null}
 					subText={t('homepage.susd-price.subtext')}
 					color={COLORS.green}
-					numberStyle="currency0"
+					numberStyle="currency1"
 					numBoxes={3}
 					infoData={
 						<Trans
