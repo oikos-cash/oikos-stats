@@ -2,6 +2,7 @@ import { FC, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import oksData from '@oikos/oikos-data-bsc';
 import { OikosJs } from '@oikos/oikos-js-bsc';
+import snxData from '@oikos/oikos-data-bsc';
 
 import { ethers, getDefaultProvider} from 'ethers';
 import { Trans, useTranslation } from 'react-i18next';
@@ -52,7 +53,8 @@ const NetworkSection: FC = () => {
 	const { oUSDPrice, setoUSDPrice } = useContext(OUSDContext);
 	const { OKSPrice, setOKSPrice, setOKSStaked } = useContext(OKSContext);
 	const provider = useContext(ProviderContext);
-	
+	const [totalActiveStakers, setTotalActiveStakers] = useState<number | null>(null);
+
 	// NOTE: use interval? or save data calls?
 	useEffect(() => {
 
@@ -81,7 +83,8 @@ const NetworkSection: FC = () => {
 			 
 			return price.toFixed(3)
 		};
-
+		
+	
 		const fetchData = async () => {
 			const { formatEther, formatUnits, parseUnits } = oksjs.ethers.utils;
 			 
@@ -131,8 +134,18 @@ const NetworkSection: FC = () => {
 				0,//provider.getBalance(oksjs.contracts.EtherCollateraloUSD.address),
 				0,//provider.getBalance(oksjs.contracts.EtherCollateral.address),
 			]);
-			
-			 
+	
+			const _debtData = await oksData.snx.debtSnapshot({account: undefined, max:1000, where: {debtBalance: {gt: 0}}});
+			console.log(_debtData)
+			const _totalActiveStakers = await oksData.snx.totalActiveStakers();
+			console.log(_totalActiveStakers)
+			console.log(`Total active stakers ${_totalActiveStakers}`)
+
+			setTotalActiveStakers(_totalActiveStakers.count);
+
+			const totalDebtUsd = _debtData.map(staker => staker.debtBalanceOf).reduce((prev, curr) => prev + curr, 0);
+			//console.log(`Total debt is $${totalDebtUsd}`)
+
 			setEtherLocked(
 				Number(oksjs.utils.formatEther(ethCollateralBalance)) +
 					Number(oksjs.utils.formatEther(ethSusdCollateralBalance))
@@ -167,7 +180,7 @@ const NetworkSection: FC = () => {
 
 			for (const { collateral, debtEntryAtIndex, initialDebtOwnership } of holders) {
 
-				console.log(`(${totalIssuedSynths} * ${lastDebtLedgerEntry} / ${debtEntryAtIndex}) * ${initialDebtOwnership}`)
+				//console.log(`(${totalIssuedSynths} * ${lastDebtLedgerEntry} / ${debtEntryAtIndex}) * ${initialDebtOwnership}`)
 				let debtBalance =
 					((totalIssuedSynths * lastDebtLedgerEntry) / debtEntryAtIndex) * initialDebtOwnership;
 
@@ -413,18 +426,18 @@ const NetworkSection: FC = () => {
 				/>
 				<StatsBox
 					key="OKSHOLDRS"
-					title={t('homepage.oks-holders.title')}
-					num={OKSHolders}
+					title={t('homepage.total-active-stakers.title')}
+					num={totalActiveStakers}
 					percentChange={null}
-					subText={t('homepage.oks-holders.subtext')}
+					subText={t('homepage.total-active-stakers.subtext')}
 					color={COLORS.green}
 					numberStyle="number"
 					numBoxes={4}
 					infoData={
 						<Trans
-							i18nKey="homepage.oks-holders.infoData"
+							i18nKey="homepage.total-active-stakers.infoData"
 							values={{
-								subgraphLinkText: t('homepage.oks-holders.subgraphLinkText'),
+								subgraphLinkText: t('homepage.total-active-stakers.subgraphLinkText'),
 							}}
 							components={{
 								linkText: <LinkText href={synthetixSubgraph} />,

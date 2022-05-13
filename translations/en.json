@@ -138,7 +138,8 @@
 		},
 		"total-active-stakers": {
 			"title": "TOTAL ACTIVE STAKERS",
-			"infoData": "The number of total active stakers is obtained from the \"TotalActiveStaker\" entity from the <linkText>Oikos subgraph.</linkText> The chart data shows the \"TotalDailyActiveStaker\" entity over time."
+			"infoData": "The number of total active stakers is obtained from the \"TotalActiveStaker\" entity from the <linkText>Oikos subgraph.</linkText> ",
+			"subtext": "The number of total active stakers is obtained from the Oikos subgraph."
 		},
 		"total-synths": {
 			"title": "TOTAL SYNTHS",
