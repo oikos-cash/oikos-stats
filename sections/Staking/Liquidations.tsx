@@ -95,7 +95,7 @@ const Liquidations: FC<LiquidationsProps> = ({
 								issuanceRatio != null &&
 								cellProps.row.original.currentCollateral
 							) {
-								console.log(`(${issuanceRatio} / ${OKSPrice}) * ${cellProps.row.original.currentCollateral}`)
+								//console.log(`(${issuanceRatio} / ${OKSPrice}) * ${cellProps.row.original.currentCollateral}`)
 								
 								const target = cellProps.row.original.debtBalance - (issuanceRatio * cellProps.row.original.currentCollateral * OKSPrice)
 								

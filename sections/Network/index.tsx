@@ -137,9 +137,9 @@ const NetworkSection: FC = () => {
 	
 			const _debtData = await oksData.snx.debtSnapshot({account: undefined, max:1000, where: {debtBalance: {gt: 0}}});
 			console.log(_debtData)
-			const _totalActiveStakers = await oksData.snx.totalActiveStakers();
+			const _totalActiveStakers = await oksData.snx.issued();
 			console.log(_totalActiveStakers)
-			console.log(`Total active stakers ${_totalActiveStakers}`)
+			console.log(_totalActiveStakers)
 
 			setTotalActiveStakers(_totalActiveStakers.count);
 

@@ -45,6 +45,8 @@ export const OKSContext = createContext({
 	setOKSPrice: (num: number) => null,
 	OKSStaked: null,
 	setOKSStaked: (num: number) => null,
+	issuanceRatio: null,
+	setIssuanceRatio: (num:number) => null,
 });
 
 const oksjs = new OikosJs({ networkId:56 });

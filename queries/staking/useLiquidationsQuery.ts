@@ -19,8 +19,9 @@ export const useLiquidationsQuery = () => {
 
 	return useQuery<LiquidationsData[], string>(QUERY_KEYS.Staking.Liquidations, async () => {
 		const activeLiquidations = await snxData.liquidations.getActiveLiquidations();
-		console.log(activeLiquidations)
+		//console.log(activeLiquidations)
 		const liquidations = [];
+		
 		for (let i = 0; i < activeLiquidations.length; i++) {
 			let promises = await Promise.all([
 				//@ts-ignore

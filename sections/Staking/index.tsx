@@ -9,6 +9,8 @@ import StatsRow from 'components/StatsRow';
 import StatsBox from 'components/StatsBox';
 import AreaChart from 'components/Charts/AreaChart';
 import { useLiquidationsQuery, LiquidationsData } from 'queries/staking';
+import { useDebtQuery, DebtData } from 'queries/staking';
+
 import Liquidations from './Liquidations';
 
 import { COLORS } from 'constants/styles';
@@ -31,16 +33,27 @@ const Staking: FC = () => {
 	const [ debt, setDebt] = useState(0);
 
 	const { oUSDPrice } = useContext(OUSDContext);
-	const { data: lidquidationsData, isLoading: isLiquidationsLoading } = useLiquidationsQuery();
-	const formattedLiquidationsData = (lidquidationsData ?? []).sort(
+	const { data: liquidationsData, isLoading: isLiquidationsLoading } = useLiquidationsQuery();
+	//const { data:  debtData, isLoading: isDebtLoading } = useDebtQuery();
+	
+
+	const formattedLiquidationsData = (liquidationsData ?? []).sort(
 		(a: LiquidationsData, b: LiquidationsData) => a.deadline - b.deadline
 	);
+
+	//const formattedDebtData = (debtData ?? []).sort(
+	//	(a: DebtData, b: DebtData) => a.debtBalanceOf - b.debtBalanceOf
+	//);
+
 	useEffect(() => {
+
+		//console.log(formattedDebtData);
+
 		const fetchFeePeriod = async (period: number): Promise<FeePeriod> => {
-			console.log({oksjs})
+			//console.log({oksjs})
 			const { formatEther } = oksjs.utils;
 			const feePeriod = await oksjs.FeePool.recentFeePeriods(period);
-			console.log({feePeriod})
+			//console.log({feePeriod})
 			return {
 				startTime: BigNumber.from(feePeriod.startTime).toNumber() * 1000 || 0,
 				feesToDistribute: Number(formatEther(feePeriod.feesToDistribute)) || 0,
@@ -81,7 +94,7 @@ const Staking: FC = () => {
 		}
 		newStakersData = newStakersData.reverse();
 
-		console.log({newStakersData})
+		//console.log({newStakersData})
 		setTotalActiveStakers(newStakersData[newStakersData.length - 1].count);
 		setStakersChartData(formatChartData(newStakersData));
 	};
@@ -95,10 +108,10 @@ const Staking: FC = () => {
 		fetchNewChartData(stakersChartPeriod);
 	}, [stakersChartPeriod]);
 
-	console.log(issuanceRatio)
+	//console.log(issuanceRatio)
 	const stakingPeriods: ChartPeriod[] = ['W', 'M', 'Y'];
 	const OKSValueStaked = useMemo(() => (OKSPrice ?? 0) * (OKSStaked ?? 0), [OKSPrice, OKSStaked]);
-	console.log({totalActiveStakers})
+	//console.log({totalActiveStakers})
 	return (
 		<>
 			<SectionHeader title="STAKING" />
