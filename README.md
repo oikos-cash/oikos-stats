@@ -1,1 +1,1 @@
-# synthetix stats
+# Oikos Stats
