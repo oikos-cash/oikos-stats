@@ -98,7 +98,7 @@ const HeaderContainer = styled.div`
 	width: 100%;
 	margin-left: -20px;
 	z-index: ${Z_INDEX.thousand};
-	background-color: ${(props) => props.theme.colors.darkBlue};
+	background-color: ${(props) => props.theme.colors.black1};
 	@media only screen and (max-width: 1266px) {
 		margin-left: 0;
 	}

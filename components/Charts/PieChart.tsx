@@ -12,8 +12,6 @@ interface BasicPieChartProps {
 const MUTED_COLORS = [
 	colors.mutedBrightBlue,
 	colors.mutedBrightOrange,
-	colors.mutedBrightGreen,
-	colors.mutedBrightPink,
 	colors.mutedBrightYellow,
 	colors.mutedBrightPurple,
 	colors.mutedBrightGray,
@@ -25,8 +23,6 @@ const MUTED_COLORS = [
 export const BRIGHT_COLORS = [
 	colors.brightBlue,
 	colors.brightOrange,
-	colors.brightGreen,
-	colors.brightPink,
 	colors.brightYellow,
 	colors.brightPurple,
 	colors.brightGray,
@@ -53,7 +49,7 @@ const BasicPieChart: FC<BasicPieChartProps> = ({ data }) => (
 					<Cell
 						key={`cell-${index}`}
 						fill={MUTED_COLORS[index % MUTED_COLORS.length]}
-						stroke={BRIGHT_COLORS[index % BRIGHT_COLORS.length]}
+						stroke="#0a0a0a"
 					/>
 				))}
 			</Pie>

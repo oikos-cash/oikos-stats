@@ -170,7 +170,7 @@ const SynthsSection: FC<{}> = () => {
 const SynthsCharts = styled.div`
 	max-width: ${MAX_PAGE_WIDTH}px;
 	display: flex;
-	background: #09092f;
+	background: #1a1a1a;
 	justify-content: space-between;
 	@media only screen and (max-width: 854px) {
 		display: block;

@@ -120,7 +120,7 @@ const BasicAreaChart: FC<BasicAreaChartProps> = ({
 					stackId="1"
 					stroke={colors.brightGreen}
 					fillOpacity={1}
-					fill="url(#colorGreen)"
+					fill="#1a1a1a"
 				/>
 			</AreaChart>
 		</ResponsiveContainer>

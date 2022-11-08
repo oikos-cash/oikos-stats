@@ -40,7 +40,7 @@ const GlobalStyle = createGlobalStyle`
 		}
 
 		.stats-box-skeleton::after, .chart-skeleton::after {
-			background: linear-gradient(90deg, #08021E 0%, #120446 146.21%);
+			background: linear-gradient(90deg, #0a0a0a 0%, #0f0f0f 146.21%);
 		}
 
 		/* Let's get this party started */

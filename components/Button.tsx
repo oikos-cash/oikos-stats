@@ -15,7 +15,7 @@ export default Button;
 const ButtonContainer = styled.button<{ isActive: boolean }>`
 	background: ${(props) => (props.isActive ? props.theme.colors.brightBlue : 'none')};
 
-	box-shadow: 0px 0px 10px rgba(0, 209, 255, 0.9);
+	box-shadow: 0px 0px 10px rgba(114, 79, 24, 1);
 	border-radius: 4px;
 	border: none;
 	width: 63px;
