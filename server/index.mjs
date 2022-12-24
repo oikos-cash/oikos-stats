@@ -31,7 +31,7 @@ app.get('/totalLocked', async (req, res, next) => {
 });
 
 
-app.listen(port, () => {
+app.listen(port, 'localhost',  () => {
     console.log(`Server listening on port ${port}`);
 });
 
@@ -91,7 +91,7 @@ const run = async ({ network }) => {
     totalLockedCached = oksLocked;
     totalCollateralCached = oksTotal;
     totalDebtCached = stakersTotalDebt;
-    
+
 }
 
 const args = [{
