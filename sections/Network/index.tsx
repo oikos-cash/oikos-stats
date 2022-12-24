@@ -187,7 +187,7 @@ const NetworkSection: FC = () => {
 			let stakersTotalCollateral = 0;
 
 
-			const response = await axios.get('http://localhost:1337/totalLocked')
+			const response = await axios.get('https://stats-proxy.oikos.cash/totalLocked')
 			 
 			const data = response.data;
 
