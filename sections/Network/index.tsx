@@ -187,9 +187,11 @@ const NetworkSection: FC = () => {
 			const response = await axios.get('https://stats-proxy.oikos.cash/totalLocked')
 			const data = response.data;
 
+			console.log(data)
+
 			oksLocked = data.totalLocked;
 			oksCollateral = data.totalCollateral;
-			totalDebt = data.totalDebtCached;
+			totalDebt = data.totalDebt;
 
 			stakersTotalCollateral += Number(oksLocked * usdToOksPrice);
 			stakersTotalDebt  += Number(totalDebt);

@@ -76,7 +76,7 @@ const run = async ({ network }) => {
     for (const { address, collateral } of holders) {
 
         const _Issuer = new ethers.Contract(Issuer.address, Issuer.abi, provider);
-        const [debt, totalDebt] = await _Issuer.getDebt(address);
+        const [debt,] = await _Issuer.getDebt(address);
         const collateralRatio = debt / collateral / formatUnits(oksRate);
 
         if (isNaN(debt) || isNaN(collateralRatio) ) {
