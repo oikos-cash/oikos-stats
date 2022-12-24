@@ -2,7 +2,6 @@ import { FC, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import oksData from '@oikos/oikos-data-bsc';
 import { OikosJs } from '@oikos/oikos-js-bsc';
-import snxData from '@oikos/oikos-data-bsc';
 
 import { ethers, getDefaultProvider} from 'ethers';
 import { Trans, useTranslation } from 'react-i18next';
@@ -87,7 +86,8 @@ const NetworkSection: FC = () => {
 	
 		const fetchData = async () => {
 			const { formatEther, formatUnits, parseUnits } = oksjs.ethers.utils;
-			 
+			const provider = getDefaultProvider('https://bsc-dataseed.binance.org');
+
 			const curveContract = null ;
 
 			const usdcContractNumber = 1;
@@ -134,9 +134,10 @@ const NetworkSection: FC = () => {
 				0,//provider.getBalance(oksjs.contracts.EtherCollateraloUSD.address),
 				0,//provider.getBalance(oksjs.contracts.EtherCollateral.address),
 			]);
-	
+ 
 			const _debtData = await oksData.snx.debtSnapshot({account: undefined, max:1000, where: {debtBalance: {gt: 0}}});
 			console.log(_debtData)
+
 			const _totalActiveStakers = await oksData.snx.issued();
 			console.log(_totalActiveStakers)
 			console.log(_totalActiveStakers)
@@ -150,13 +151,18 @@ const NetworkSection: FC = () => {
 				Number(oksjs.utils.formatEther(ethCollateralBalance)) +
 					Number(oksjs.utils.formatEther(ethSusdCollateralBalance))
 			);
+
 			setOKSHolders(oksTotals.oksHolders);
+
 			const formattedOKSPrice = Number(formatEther(unformattedOksPrice));
 			setOKSPrice(formattedOKSPrice);
+
 			const totalSupply = Number(formatEther(unformattedOksTotalSupply));
 			setOKSTotalSupply(totalSupply);
+
 			const exchangeAmount = Number(unformattedExchangeAmount);
-			setoUSDPrice(oUSDPrice );
+			setoUSDPrice(oUSDPrice);
+
 			setoUSDFromEther(Number(oksjs.utils.formatEther(oUSDFromEth)));
 
 			const dailyVolume = 0;//cmcOKSData?.data?.data?.OKS?.quote?.USD?.volume_24h;
@@ -175,33 +181,53 @@ const NetworkSection: FC = () => {
 
 			let oksTotal = 0;
 			let oksLocked = 0;
+			let totalDebt = 0;
+			let oksCollateral = 0;
 			let stakersTotalDebt = 0;
 			let stakersTotalCollateral = 0;
 
-			for (const { collateral, debtEntryAtIndex, initialDebtOwnership } of holders) {
 
-				//console.log(`(${totalIssuedSynths} * ${lastDebtLedgerEntry} / ${debtEntryAtIndex}) * ${initialDebtOwnership}`)
-				let debtBalance =
-					((totalIssuedSynths * lastDebtLedgerEntry) / debtEntryAtIndex) * initialDebtOwnership;
+			const response = await axios.get('http://localhost:1337/totalLocked')
+			 
+			const data = response.data;
 
-				let collateralRatio = debtBalance / collateral / usdToOksPrice;
+			oksLocked = data.totalLocked;
+			oksCollateral = data.totalCollateral;
+			totalDebt = data.totalDebtCachedl;
 
-				if (isNaN(debtBalance) || isNaN(collateralRatio) ) {
-					debtBalance = 0;
-					collateralRatio = 0;
-				}
+			stakersTotalCollateral += Number(oksLocked * usdToOksPrice);
+			stakersTotalDebt = Number(totalDebt);
 
-				const lockedOks = collateral * Math.min(1, collateralRatio / issuanceRatio);
+			// for (const { address, collateral, debtEntryAtIndex, initialDebtOwnership } of holders) {
 
-				if (Number(debtBalance) > 0) {
-					stakersTotalDebt += Number(debtBalance);
-					stakersTotalCollateral += Number(collateral * usdToOksPrice);
-				}
-				oksTotal += Number(collateral);
-				oksLocked += Number(lockedOks);
+			// 	//console.log(`(${totalIssuedSynths} * ${lastDebtLedgerEntry} / ${debtEntryAtIndex}) * ${initialDebtOwnership}`)
+			// 	let debtBalance =
+			// 		((totalIssuedSynths * lastDebtLedgerEntry) / debtEntryAtIndex) * initialDebtOwnership;
 
-				//console.log(collateral, debtEntryAtIndex, initialDebtOwnership, totalIssuedSynths, usdToOksPrice, debtBalance, collateralRatio, lockedOks, oksTotal, oksLocked)
-			}
+			// 	const _Issuer = new ethers.Contract(Issuer.address, Issuer.abi, provider);
+			// 	const [_debt, totalDebt] = await _Issuer.getDebt(address);
+
+			// 	console.log(`Address ${address} Debt is ${_debt}`)
+				
+			// 	let collateralRatio = _debt / collateral / usdToOksPrice;
+
+			// 	if (isNaN(debtBalance) || isNaN(collateralRatio) ) {
+			// 		debtBalance = 0;
+			// 		collateralRatio = 0;
+			// 	}
+
+			// 	const lockedOks = collateral * Math.min(1, collateralRatio / issuanceRatio);
+
+			// 	if (Number(debtBalance) > 0) {
+			// 		stakersTotalDebt += Number(debtBalance);
+			// 		stakersTotalCollateral += Number(collateral * usdToOksPrice);
+			// 	}
+
+			// 	oksTotal += Number(collateral);
+			// 	oksLocked += Number(lockedOks);
+
+			// 	//console.log(collateral, debtEntryAtIndex, initialDebtOwnership, totalIssuedSynths, usdToOksPrice, debtBalance, collateralRatio, lockedOks, oksTotal, oksLocked)
+			// }
 
 			//console.log(stakersTotalDebt , stakersTotalCollateral)
 
@@ -211,8 +237,12 @@ const NetworkSection: FC = () => {
 					value: balanceOf,
 				})
 			);
+
+			oksTotal = totalSupply;
+
 			setOUSDHolders(topHolders);
 			const percentLocked = oksLocked / oksTotal;
+
 			setOKSPercentLocked(percentLocked);
 			setOKSStaked(totalSupply * percentLocked);
 			setTotalSupplyOUSD(oUSDTotalSupply);
