@@ -10,13 +10,7 @@ const provider = getDefaultProvider('https://bsc-dataseed.binance.org');
 
 const app = express();
 
-app.use(function setCommonHeaders(req, res, next) {
-    res.set("Access-Control-Allow-Private-Network", "true");
-    next();
-  });
-  
-// this has to come after
-app.use(cors()({ credentials: true }))
+app.use(cors())
 
 const port = 1337;
 
@@ -28,15 +22,13 @@ let totalLockedCached = 79176283.62552813;
 let totalCollateralCached = 0;
 let totalDebtCached = 0;
 
-app.get('/totalLocked', async (req, res, next) => {
-
-    // Return the array as JSON
-    res.json({
-        totalLocked: totalLockedCached,
-        totalCollateral: totalCollateralCached,
-    });
+app.all('/', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Private-Network", "true");
+    next();
 });
-
+  
 
 app.listen(port, 'localhost',  () => {
     console.log(`Server listening on port ${port}`);
