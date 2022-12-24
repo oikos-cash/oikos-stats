@@ -192,7 +192,7 @@ const NetworkSection: FC = () => {
 			totalDebt = data.totalDebtCached;
 
 			stakersTotalCollateral += Number(oksLocked * usdToOksPrice);
-			stakersTotalDebt = Number(totalDebt);
+			stakersTotalDebt  += Number(totalDebt);
 
 			// for (const { address, collateral, debtEntryAtIndex, initialDebtOwnership } of holders) {
 

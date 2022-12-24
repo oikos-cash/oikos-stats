@@ -87,7 +87,8 @@ const run = async ({ network }) => {
         const lockedOks = collateral * Math.min(1, collateralRatio / issuanceRatio);
 
         if (Number(debt) > 0) {
-            stakersTotalDebt += Number(debt);
+            const formattedDebt = formatUnits(debt);
+            stakersTotalDebt += Number(formattedDebt);
             stakersTotalCollateral += Number(collateral *  formatUnits(oksRate));
         }
 
