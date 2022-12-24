@@ -9,7 +9,14 @@ const { parseUnits, formatUnits, formatBytes32String } = utils;
 const provider = getDefaultProvider('https://bsc-dataseed.binance.org');
 
 const app = express();
-app.use(cors())
+
+app.use(function setCommonHeaders(req, res, next) {
+    res.set("Access-Control-Allow-Private-Network", "true");
+    next();
+  });
+  
+// this has to come after
+app.use(cors()({ credentials: true }))
 
 const port = 1337;
 
