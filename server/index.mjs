@@ -29,6 +29,15 @@ app.all('/', function(req, res, next) {
     next();
 });
   
+app.get('/totalLocked', async (req, res, next) => {
+
+    // Return the array as JSON
+    res.json({
+        totalLocked: totalLockedCached,
+        totalCollateral: totalCollateralCached,
+    });
+});
+
 
 app.listen(port, 'localhost',  () => {
     console.log(`Server listening on port ${port}`);
