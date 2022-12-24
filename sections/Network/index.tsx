@@ -170,8 +170,6 @@ const NetworkSection: FC = () => {
 				setOKS24HVolume(dailyVolume);
 			}
 
-			const lastDebtLedgerEntry = Number(oksjs.ethers.utils.formatUnits(unformattedLastDebtLedgerEntry, 27) );
-
 			const [totalIssuedSynths, issuanceRatio, usdToOksPrice, oUSDTotalSupply] = [
 				unformattedTotalIssuedSynths,
 				unformattedIssuanceRatio,
@@ -186,14 +184,12 @@ const NetworkSection: FC = () => {
 			let stakersTotalDebt = 0;
 			let stakersTotalCollateral = 0;
 
-
 			const response = await axios.get('https://stats-proxy.oikos.cash/totalLocked')
-			 
 			const data = response.data;
 
 			oksLocked = data.totalLocked;
 			oksCollateral = data.totalCollateral;
-			totalDebt = data.totalDebtCachedl;
+			totalDebt = data.totalDebtCached;
 
 			stakersTotalCollateral += Number(oksLocked * usdToOksPrice);
 			stakersTotalDebt = Number(totalDebt);
@@ -229,7 +225,7 @@ const NetworkSection: FC = () => {
 			// 	//console.log(collateral, debtEntryAtIndex, initialDebtOwnership, totalIssuedSynths, usdToOksPrice, debtBalance, collateralRatio, lockedOks, oksTotal, oksLocked)
 			// }
 
-			//console.log(stakersTotalDebt , stakersTotalCollateral)
+			console.log(stakersTotalDebt , stakersTotalCollateral)
 
 			const topHolders = topOUSDHolders.map(
 				({ balanceOf, address }: { balanceOf: number; address: string }) => ({

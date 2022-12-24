@@ -35,6 +35,7 @@ app.get('/totalLocked', async (req, res, next) => {
     res.json({
         totalLocked: totalLockedCached,
         totalCollateral: totalCollateralCached,
+        totalDebt: totalDebtCached
     });
 });
 
