@@ -18,9 +18,9 @@ const networksById = {
     'bsc': 56,
 }
 
-let totalLockedCached = 79176283.62552813;
-let totalCollateralCached = 0;
-let totalDebtCached = 0;
+let totalLockedCached = 91859450.73861203;
+// let totalCollateralCached = 255507690.4070662;
+let totalDebtCached = 89598.34548541054;
 
 app.all('/', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -34,7 +34,7 @@ app.get('/totalLocked', async (req, res, next) => {
     // Return the array as JSON
     res.json({
         totalLocked: totalLockedCached,
-        totalCollateral: totalCollateralCached,
+        // totalCollateral: totalCollateralCached,
         totalDebt: totalDebtCached
     });
 });
@@ -99,7 +99,7 @@ const run = async ({ network }) => {
     console.log(` Total Locked updated to ${oksLocked} OKS`);
 
     totalLockedCached = oksLocked;
-    totalCollateralCached = oksTotal;
+    // totalCollateralCached = oksTotal;
     totalDebtCached = stakersTotalDebt;
 
 }

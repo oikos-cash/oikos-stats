@@ -190,7 +190,7 @@ const NetworkSection: FC = () => {
 			console.log(data)
 
 			oksLocked = data.totalLocked;
-			oksCollateral = data.totalCollateral;
+			// oksCollateral = data.totalCollateral;
 			totalDebt = data.totalDebt;
 
 			stakersTotalCollateral += Number(oksLocked * usdToOksPrice);
