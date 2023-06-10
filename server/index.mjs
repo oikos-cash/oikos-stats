@@ -47,60 +47,64 @@ app.listen(port, 'localhost',  () => {
 
 const run = async ({ network }) => {
 
-    const networkId = networksById[network];
-    const oksJS = new OikosJs({ network, networkId, provider }); 
+    try {
+        const networkId = networksById[network];
+        const oksJS = new OikosJs({ network, networkId, provider }); 
+        
+        // const debtData = await oksData
+        // .snx
+        // .debtSnapshot({
+        //     account: undefined, 
+        //     max:1000,
+        //      where: {
+        //         debtBalance: {
+        //             gt: 0
+        //         }
+        //     }
+        // });
     
-    // const debtData = await oksData
-    // .snx
-    // .debtSnapshot({
-    //     account: undefined, 
-    //     max:1000,
-    //      where: {
-    //         debtBalance: {
-    //             gt: 0
-    //         }
-    //     }
-    // });
-
-    const oksRate = await oksJS.ExchangeRates.rateForCurrency(formatBytes32String('OKS'));
-    const issuanceRatio = await oksJS.OikosState.issuanceRatio();
-    const holders = await oksData.snx.holders({ max: 1000 });
-
-    let oksTotal = 0;
-    let oksLocked = 0;
-    let stakersTotalDebt = 0;
-    let stakersTotalCollateral = 0;
-
-    console.log(`Refreshing total locked ... `)
-
-    for (const { address, collateral } of holders) {
-
-        const _Issuer = new ethers.Contract(Issuer.address, Issuer.abi, provider);
-        const [debt,] = await _Issuer.getDebt(address);
-        const collateralRatio = debt / collateral / formatUnits(oksRate);
-
-        if (isNaN(debt) || isNaN(collateralRatio) ) {
-            debt = 0;
-            collateralRatio = 0;
+        const oksRate = await oksJS.ExchangeRates.rateForCurrency(formatBytes32String('OKS'));
+        const issuanceRatio = await oksJS.OikosState.issuanceRatio();
+        const holders = await oksData.snx.holders({ max: 1000 });
+    
+        let oksTotal = 0;
+        let oksLocked = 0;
+        let stakersTotalDebt = 0;
+        let stakersTotalCollateral = 0;
+    
+        console.log(`Refreshing total locked ... `)
+    
+        for (const { address, collateral } of holders) {
+    
+            const _Issuer = new ethers.Contract(Issuer.address, Issuer.abi, provider);
+            const [debt,] = await _Issuer.getDebt(address);
+            const collateralRatio = debt / collateral / formatUnits(oksRate);
+    
+            if (isNaN(debt) || isNaN(collateralRatio) ) {
+                debt = 0;
+                collateralRatio = 0;
+            }
+    
+            const lockedOks = collateral * Math.min(1, collateralRatio / issuanceRatio);
+    
+            if (Number(debt) > 0) {
+                const formattedDebt = formatUnits(debt);
+                stakersTotalDebt += Number(formattedDebt);
+                stakersTotalCollateral += Number(collateral *  formatUnits(oksRate));
+            }
+    
+            oksTotal += Number(collateral);
+            oksLocked += Number(lockedOks);
         }
-
-        const lockedOks = collateral * Math.min(1, collateralRatio / issuanceRatio);
-
-        if (Number(debt) > 0) {
-            const formattedDebt = formatUnits(debt);
-            stakersTotalDebt += Number(formattedDebt);
-            stakersTotalCollateral += Number(collateral *  formatUnits(oksRate));
-        }
-
-        oksTotal += Number(collateral);
-        oksLocked += Number(lockedOks);
+    
+        console.log(` Total Locked updated to ${oksLocked} OKS`);
+    
+        totalLockedCached = oksLocked;
+        // totalCollateralCached = oksTotal;
+        totalDebtCached = stakersTotalDebt;
+    } catch (err) {
+        console.error(err);
     }
-
-    console.log(` Total Locked updated to ${oksLocked} OKS`);
-
-    totalLockedCached = oksLocked;
-    // totalCollateralCached = oksTotal;
-    totalDebtCached = stakersTotalDebt;
 
 }
 
